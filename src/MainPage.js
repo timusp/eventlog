@@ -78,7 +78,7 @@ class MainPage extends React.Component{
     addEventToggle(){
         if(this.state.org_flag===true){
             return(
-                <button>
+                <button className="addEventBtn">
                     Add Event
                 </button>
             )
@@ -101,10 +101,8 @@ class MainPage extends React.Component{
                         <button className="btnA" onClick={()=>{this.setState({tab:3})}}>Registered Events</button>
                     </div>
 
-                    <br /><br /><br />
-                    <div>
-                        <div className="MainContainer">
-                            <div className="EventContainer">
+                    
+                            <div className="events">
                                 
                                 {this.getEvents()}
                                 {
@@ -112,14 +110,12 @@ class MainPage extends React.Component{
                                         <Event key={index} resp={item} />
                                     ))
                                 }
-                                {this.addEventToggle()}
+                          
 
                             </div>
-
-                        </div>
+                            {this.addEventToggle()}
                         
 
-                    </div>
                 </div>
             </div>
         )    

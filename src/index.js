@@ -64,7 +64,7 @@ export default function BasicExample() {
  ReactDOM.render(
     //<BasicExample />,
     //<GLogin />,
-    //<SelectClub />,
+    <SelectClub />,
     //<MainPage />,
     //<AddEvent />,
     //<ModifyEvent event_id={1}/>,

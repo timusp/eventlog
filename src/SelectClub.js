@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.css';
+import {Button,Grid} from '@material-ui/core/';
 
 
 class SelectClub extends React.Component{
@@ -67,7 +68,11 @@ class SelectClub extends React.Component{
 
     render(){
         return(
-            <div className="btnContainer">
+            <Grid container
+                  spacing={0}
+                  align="center"
+                  justify="center"
+                  alignItems="center">
                 <form
                     id="club-select"
                     action={this.props.action}
@@ -96,14 +101,14 @@ class SelectClub extends React.Component{
                     }
                     <div>   
                         <button
-                            className="btnA"
+                            
                             onClick={()=>{this.submitClub()}}
                         >
                             Submit
                         </button>
                     </div>
                 </form>
-            </div>
+            </Grid>
         )
 
 

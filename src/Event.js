@@ -54,29 +54,31 @@ class Event extends React.Component{
     render(){
         if(this.state.expand===false){
             return(
-                    <div className="d-flex align-items-center">
-                        <div className="d-inline-block">
-                            <button onClick={this.toggleExpand}><i className="fa fa-chevron-right"></i></button> 
-                        </div>
-                        <div className="d-inline-block">
-                            <p key={this.state.resp.event_id}>{` `+this.state.resp.event_name +` `+ this.state.resp.event_date+` `+this.state.resp.event_time+` `+this.state.resp.event_venue}</p>
-                        </div>
+                <span >
+                    <div className="event" >
+                        <p key={this.state.resp.event_id}>{this.state.resp.event_name}</p>
+                        <p key={this.state.resp.event_id}>{this.state.resp.event_date}</p>
+                        <p key={this.state.resp.event_id}>{this.state.resp.event_time}</p>
                     </div>
+                </span>
+                   
+                    
             );
             
         }
         else{
             return(
-                    <div className="d-flex align-items-center">
-                        <div className="d-inline-block">
-                            <button onClick={this.toggleExpand}><i className="fa fa-chevron-down"></i></button> 
-                        </div>
-                        <div className="d-inline-block">
-                            <p key={this.state.resp.event_id}>{this.state.resp.event_name +` `+ this.state.resp.event_date+` `+this.state.resp.event_time+` `+this.state.resp.event_venue+` `+this.state.resp.event_desc+` `+this.state.resp.event_reg_link}</p>
-                            <img src={this.state.resp.event_poster}></img>
-                        </div>
+                    <div className="eventExpanded" >
+                        <p key={this.state.resp.event_id}>{this.state.resp.event_name}</p>
+                        <p key={this.state.resp.event_id}>{this.state.resp.event_date}</p>
+                        <p key={this.state.resp.event_id}>{this.state.resp.event_time}</p>
+                        <p key={this.state.resp.event_id}>{this.state.resp.event_venue}</p>
+                        <p key={this.state.resp.event_id}>{this.state.resp.event_desc}</p>
+                        <p key={this.state.resp.event_id}>{this.state.resp.event_event_reg_link}</p>
+                        <img src={this.state.resp.event_poster}></img>
                     </div>
-                );
+                
+            );
         }
 
        

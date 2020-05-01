@@ -1,43 +1,33 @@
 import React from 'react';
 import './index.css';
-
+import {Button,Box,Grid} from '@material-ui/core/';
 
 class GLogin extends React.Component{
     constructor() {
       super();
       this.state={
+        int:"",
         fname:null,
         lname:null,
-        email:null,
+        email:"",
         resp:[{id:null,name:null,email:null}]
       }
     }
-  
     render(){
           return(
-            <div className="container">
-              <div className="brandContainer">
-                <h2 className="brand">EventLog</h2>
-              </div>
-              <div className="btnContainer">
-                <button className="gButton" ref="gButton">Login with Google</button>
-              </div>
-              <div className="profileinfo">
-                {this.state.fname}
-                {this.state.lname}
-                {this.state.email}
-              </div>
-              <br />
-              <br />
-              <div>
-                <ol>
-                  {this.state.resp.map(item => {
-                    //console.log(item);
-                    //return (<li key={item.userId}>{item.name +` : `+ item.mailId}</li>);
-                  })}
-                </ol>
-              </div>
-            </div>
+                <Grid container
+                  spacing={0}
+                  align="center"
+                  justify="center"
+                  alignItems="center">
+
+                
+                    <Button variant="contained" color="primary" ref="gButton">
+                      Login with Google</Button>
+                    <p>{this.state.int}  </p>
+                </Grid>
+              
+            
           );
       }
       testgetAPI(){
@@ -74,8 +64,8 @@ class GLogin extends React.Component{
           window['googleSDKLoaded'] = () => {
             window['gapi'].load('auth2', () => {
               this.auth2 = window['gapi'].auth2.init({
-                //client_id: '21903730875-hql4p4h91bni869f4gevmutn5bta7v1t.apps.googleusercontent.com',  //ext
-                client_id: '413833473817-2mvctgjlcfp6015mqh8df3p3bd60757d.apps.googleusercontent.com', //au_internal
+                client_id: '21903730875-hql4p4h91bni869f4gevmutn5bta7v1t.apps.googleusercontent.com',  //ext
+                //client_id: '413833473817-2mvctgjlcfp6015mqh8df3p3bd60757d.apps.googleusercontent.com', //au_internal
                 cookiepolicy: 'single_host_origin',
                 scope: 'profile email',
                 prompt: 'select_account'
@@ -115,8 +105,11 @@ class GLogin extends React.Component{
               this.setState({fname: profile.getGivenName()});
               this.setState({lname: profile.getFamilyName()});
               this.setState({email: profile.getEmail()});
+              if(!profile.getEmail().includes('@ahduni.edu.in')){
+                this.setState({int:'Please Login with University Mail'})
+              }
               //YOUR CODE HERE
-              console.log("logged in!");
+              //console.log("logged in!");
               
            
            

@@ -1,3 +1,14 @@
+html, body {
+    background-color: black;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  #root {
+    height: 100%;
+    display: flex;
+  }
 @font-face {
     font-family: 'ProductSans';
     src: local('ProductSans'), url(./fonts/reg.ttf) format('ttf');
@@ -29,6 +40,9 @@
 }
 .Border{
     border: 2px solid gray;
+    max-width: 80%;
+    margin: 30px  auto;
+    
 }
 
 .btnA {
@@ -68,4 +82,42 @@
 
 .d-inline-block{
     margin:5px;
+}
+
+
+.event{
+  background: #fff;
+  position: relative;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 10px;
+  width: 300px;
+  color: #333;
+  flex-basis: width;
+  background-color: rgb(165, 230, 230);
+}
+.eventExpanded{
+    background: #fff;
+    position: relative;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 10px;
+    width: 300px;
+    color: #333;
+    flex-basis: width;
+    background-color: rgb(165, 230, 230);
+}
+
+.events{
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 30px  auto;
+    width: 1000px;
+}
+
+.addEventBtn{
+    position: fixed;
+    left:80%;
+    top:80%;
 }
