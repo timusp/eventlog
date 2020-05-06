@@ -107,7 +107,7 @@ class MainPage extends React.Component{
                                 {this.getEvents()}
                                 {
                                     this.state.events.map((item, index) => (
-                                        <Event key={index} resp={item} />
+                                       "issues"// <Event key={index} resp={item} />
                                     ))
                                 }
                           

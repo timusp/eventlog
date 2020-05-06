@@ -1,65 +1,89 @@
 import React from 'react';
 import './index.css';
-import {Button,Box,Grid} from '@material-ui/core/';
+import {Button,Box} from '@material-ui/core/';
+import SelectClub from './SelectClub';
+import MainPage from './MainPage';
+import TopBar from './TopBar';
+import {ProtectedRoute} from './protected.route'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  useHistory,
+  useLocation
+} from "react-router-dom";
 
 class GLogin extends React.Component{
-    constructor() {
-      super();
+    constructor(props) {
+      super(props);
       this.state={
         int:"",
         fname:null,
         lname:null,
         email:"",
-        resp:[{id:null,name:null,email:null}]
+        resp:[{id:null,name:null,email:null}],
+        isAuth:false,
+        cur_user:0,
+        isNew:false,
       }
     }
-    render(){
-          return(
-                <Grid container
-                  spacing={0}
-                  align="center"
-                  justify="center"
-                  alignItems="center">
 
-                
+
+    render(){
+      if(this.state.isAuth){
+        return(null)
+      }else{
+
+      
+          return(
+            <div>
+            <TopBar />
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  minHeight="100vh"
+                  marginTop={-10}
+                >
+                  
                     <Button variant="contained" color="primary" ref="gButton">
                       Login with Google</Button>
                     <p>{this.state.int}  </p>
-                </Grid>
-              
-            
+                    
+                </Box>
+
+            </div>
           );
       }
-      testgetAPI(){
-        fetch("http://localhost:8000/api/users")
-          .then(res=>res.json())
-          .then(res=>{
-            //console.log(res.data);
-            this.setState({resp:res.data})
-          })
-          
-          .catch(err=>err);
-        
-      }
+    }
 
-      testpostAPI(){
+    postAPI(){
         
-        const tes={name:"sumit",email:"asda"};
-        console.log(tes);
+        const reqs={email:this.state.email};
+        //console.log(reqs);
 
-        fetch('http://localhost:8000/api/user', {
+        fetch('http://localhost:8000/api/userauth', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(tes)
-            }).then(console.log(tes))
+                body: JSON.stringify(reqs)
+            })
             .then((res) => res.json())
-            .then((data) =>  console.log(data))
+            .then((data) =>  {
+              this.setState({cur_user:data.id})
+              this.setState({isNew:data.isNew})
+              this.setState({isAuth:true})
+              this.props.onLogin(this.state.cur_user,this.state.isNew,this.state.isAuth);
+              
+            })
+
             .catch((err)=>console.log(err))
             
-      }
-      googleSDK() {
+    }
+    googleSDK() {
    
           window['googleSDKLoaded'] = () => {
             window['gapi'].load('auth2', () => {
@@ -81,17 +105,15 @@ class GLogin extends React.Component{
             js.src = "https://apis.google.com/js/platform.js?onload=googleSDKLoaded";
             fjs.parentNode.insertBefore(js, fjs);
           }(document, 'script', 'google-jssdk'));
-      }
-      componentDidMount() {
+    }
+    componentDidMount() {
         this.googleSDK();
-        //this.testgetAPI();
-        //this.testpostAPI();
-      }
+        //this.postAPI();
+    }
   
-      prepareLoginButton = () => {
+    prepareLoginButton = () => {
    
-          console.log(this.refs.gButton);
-           
+          //console.log(this.refs.gButton);
           this.auth2.attachClickHandler(this.refs.gButton, {},
             (googleUser) => {
            
@@ -99,24 +121,27 @@ class GLogin extends React.Component{
               //console.log('Token || ' + googleUser.getAuthResponse().id_token);
               //console.log('ID: ' + profile.getId());
               //console.log('Image URL: ' + profile.getImageUrl());
-              console.log('firstName: ' + profile.getGivenName());
-              console.log('lastName: ' + profile.getFamilyName());
-              console.log('Email: ' + profile.getEmail());
+              //console.log('firstName: ' + profile.getGivenName());
+              //console.log('lastName: ' + profile.getFamilyName());
+              //console.log('Email: ' + profile.getEmail());
               this.setState({fname: profile.getGivenName()});
               this.setState({lname: profile.getFamilyName()});
               this.setState({email: profile.getEmail()});
               if(!profile.getEmail().includes('@ahduni.edu.in')){
                 this.setState({int:'Please Login with University Mail'})
               }
+              else{
+                this.setState({int:''})
+              }
               //YOUR CODE HERE
               //console.log("logged in!");
+              //this.props.history.push("/dashboard");
+              this.postAPI();
               
-           
-           
-              }, (error) => {
+            }, (error) => {
               alert(JSON.stringify(error, undefined, 2));
-            });
-           
+          });
+
         }
   
   

@@ -1,6 +1,7 @@
 import React from 'react';
 import './index.css';
-import {Button,Grid} from '@material-ui/core/';
+import {Button,Box,Checkbox,FormLabel} from '@material-ui/core/';
+import TopBar from './TopBar';
 
 
 class SelectClub extends React.Component{
@@ -68,47 +69,64 @@ class SelectClub extends React.Component{
 
     render(){
         return(
-            <Grid container
-                  spacing={0}
-                  align="center"
-                  justify="center"
-                  alignItems="center">
+            <div>
+            <TopBar />
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                minHeight="100vh"
+                >
+                <Box marginTop={-40}>
                 <form
                     id="club-select"
                     action={this.props.action}
                     method={this.props.method}
                     onSubmit={this.onSubmit}
                 >
-                    <p>Select your preferred Clubs: </p>
+                    <Box margin={2}>
+                        <FormLabel >Select your preferred Clubs: </FormLabel>
+                    </Box>
                     
                     {
                         //console.log(this.state.clubs)
                         this.state.clubs.map((club, index) => (
-                            <div key={index}>
-                                <input 
-                                    type="checkbox"
-                                    name={club.club_id}
+                            <Box
+                                display="flex"
+                                alignItems="center"
+                                marginLeft={5}
+                            >
+                                <Checkbox 
                                     value={club.club_id}
+                                    inputProps={{ 'aria-label': 'primary checkbox' }}
+
                                     key={index}
 
                                     onChange={()=>{this.handleCheck(club.club_id)}}
-                                ></input>
+                                ></Checkbox>
                                 
-                                <label> {club.club_name}</label>
-                            </div>
+                                <Box marginTop={0.5}><FormLabel>{club.club_name}</FormLabel></Box>
+                            </Box>                            
                         ))
                         
                     }
-                    <div>   
-                        <button
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        margin={5}
+                    >
+                        <Button variant="contained" color="primary" 
                             
                             onClick={()=>{this.submitClub()}}
                         >
                             Submit
-                        </button>
-                    </div>
+                        </Button>
+                        </Box>   
                 </form>
-            </Grid>
+                </Box>
+            </Box>
+            </div>
         )
 
 

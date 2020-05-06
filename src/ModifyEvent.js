@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.css';
+import TopBar from './TopBar';
 
 
 
@@ -61,6 +62,8 @@ class AddEvent extends React.Component{
 
         
         return(
+            <div>
+            <TopBar />
             <div className="btnContainer">
                 <form
                     id="club-select"
@@ -121,6 +124,7 @@ class AddEvent extends React.Component{
                         >
                             Submit
                         </button>
+            </div>
             </div>
         )
     }

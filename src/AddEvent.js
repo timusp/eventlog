@@ -1,5 +1,7 @@
 import React from 'react';
 import './index.css';
+import {Button,Box,Checkbox,FormLabel,Input} from '@material-ui/core/';
+import TopBar from './TopBar';
 
 
 
@@ -43,17 +45,29 @@ class AddEvent extends React.Component{
 
     render(){
         return(
-            <div className="btnContainer">
+            <div>
+            <TopBar />
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                minHeight="100vh"
+                marginTop={20}
+
+            >
                 <form
                     id="club-select"
                     action={this.props.action}
                     method={this.props.method}
                     onSubmit={this.onSubmit}
                 ></form>
-                <label>Name</label> <input type="text"
-                    onChange={event=>this.setState({name:event.target.value})}></input><br/ >
-                <label>Date</label> <input type="text"
-                    onChange={event=>this.setState({date:event.target.value})}></input><br/ >
+                <Box
+                    alignItems="center"
+                >
+                <FormLabel>Name</FormLabel> <br /><Input type="text"
+                    onChange={event=>this.setState({name:event.target.value})}></Input><br /><br />
+                <FormLabel>Date</FormLabel> <br /><Input type="text"
+                    onChange={event=>this.setState({date:event.target.value})}></Input><br /><br />
                 
                 {/*<DatePicker
                     onChange={(date)=>this.setDate(date)}
@@ -63,8 +77,8 @@ class AddEvent extends React.Component{
                     />*/
                 }
                 
-                <label>Time</label> <input type="text"
-                    onChange={event=>this.setState({time:event.target.value})}></input><br/ >
+                <FormLabel>Time</FormLabel><br /> <Input type="text"
+                    onChange={event=>this.setState({time:event.target.value})}></Input><br /><br />
                 
                 {/*<TimePicker
                     onChange={(time)=>this.setTime(time)}
@@ -74,26 +88,35 @@ class AddEvent extends React.Component{
                     disableClock={true}
                     />*/
                 }   
-                <label>Venue</label> <input type="text" 
-                    onChange={event=>this.setState({venue:event.target.value})}></input><br/ >
-                <label>Type</label> <input type="text"
-                    onChange={event=>this.setState({type:event.target.value})}></input><br/ >
-                <label>Description</label> <input type="text"
-                    onChange={event=>this.setState({desc:event.target.value})}></input><br/ >
-                <label>Poster Link</label> <input type="text"
-                    onChange={event=>this.setState({poster:event.target.value})}></input><br/ >
-                <label>Registraion Link</label> <input type="text"
-                    onChange={event=>this.setState({reglink:event.target.value})}></input><br/ >
-                <label>Registraion Fee</label> <input type="text"
-                    onChange={event=>this.setState({regfee:event.target.value})}></input><br/ >
-                <label>Registraion Deadline</label> <input type="text"
-                    onChange={event=>this.setState({deadline:event.target.value})}></input><br/ >
-                <button
-                            className="btnA"
-                            onClick={()=>{this.SubmitEvent()}}
-                        >
-                            Submit
-                        </button>
+                <FormLabel>Venue</FormLabel> <br /><Input type="text" 
+                    onChange={event=>this.setState({venue:event.target.value})}></Input><br /><br />
+                <FormLabel>Type</FormLabel><br /> <Input type="text"
+                    onChange={event=>this.setState({type:event.target.value})}></Input><br /><br />
+                <FormLabel>Description</FormLabel><br /> <Input type="text"
+                    onChange={event=>this.setState({desc:event.target.value})}></Input><br /><br />
+                <FormLabel>Poster Link</FormLabel> <br /><Input type="text"
+                    onChange={event=>this.setState({poster:event.target.value})}></Input><br /><br />
+                <FormLabel>Registraion Link</FormLabel> <br /><Input type="text"
+                    onChange={event=>this.setState({reglink:event.target.value})}></Input><br /><br />
+                <FormLabel>Registraion Fee</FormLabel> <br /><Input type="text"
+                    onChange={event=>this.setState({regfee:event.target.value})}></Input><br /><br />
+                <FormLabel>Registraion Deadline</FormLabel> <br /><Input type="text"
+                    onChange={event=>this.setState({deadline:event.target.value})}></Input><br /><br />
+                <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        margin={5}
+                >
+                    <Button variant="contained" color="primary" 
+                        className="btnA"
+                        onClick={()=>{this.SubmitEvent()}}
+                    >Submit
+                    </Button>
+                </Box>
+                
+                </Box>
+            </Box>
             </div>
         )
 
