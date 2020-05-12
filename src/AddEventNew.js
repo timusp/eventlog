@@ -40,7 +40,7 @@ class AddEvent extends React.Component {
             desc:'',
             poster:'',
             link:'',
-            paid:false,
+            paid:"false",
             seats:0,
             start_date:'',
             end_date:'',
@@ -62,7 +62,7 @@ class AddEvent extends React.Component {
         this.state.time===''||
         this.state.deadline==='')
         {
-            console.log("here")
+            
             return true;
         }else{
             if(this.state.error.name!=null||
@@ -78,22 +78,41 @@ class AddEvent extends React.Component {
     SubmitEvent(){
         console.log(this.checkErr())
 
-        /*
-
-        fetch('http://localhost:8000/api/submitevent', {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(this.state.req)
-                })
-                .then((res) => res.json())
-                //.then((data) =>  console.log(data))
-                .catch((err)=>console.log(err))
-                */
-
+        if(!this.checkErr()){
+            this.setState({
+                req:{name:this.state.name,
+                    desc:this.state.desc,
+                    club:this.state.club,
+                    type:this.state.type,
+                    venue:this.state.venue,
+                    poster:this.state.poster,
+                    link:this.state.link,
+                    paid:this.state.paid,
+                    seats:this.state.seats,
+                    start_date:this.state.start_date,
+                    end_date:this.state.end_date,
+                    time:this.state.time,
+                    deadline:this.state.deadline,
+                }
+            })            
+            fetch('http://localhost:8000/api/submitevent', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(this.state.req)
+            })
+            .then((res) => res.json())
+            //.then((data) =>  console.log(data))
+            .catch((err)=>console.log(err))
+            this.setState({btnColor:"primary"})
+        }else{
+            this.setState({btnColor:"secondary"})
         }
-    isTypeOk(){
+                
+    }
+    
+        isTypeOk(){
         if(this.state.type===null){
             let copy=this.state.error
             copy.type="error"
@@ -169,7 +188,6 @@ class AddEvent extends React.Component {
     }
     
     render() {
-    
         return (
             <ContainerPanel>
             <div style={{ padding: 16, margin: 'auto', maxWidth: 600 }}>
@@ -360,9 +378,9 @@ class AddEvent extends React.Component {
                                     row
                                     name="paid" 
                                     value={this.state.paid} 
-                                    onChange={(event)=>{this.setState({paid:event.target.value})}}>
-                                    <FormControlLabel label="Yes" value={true} control={<Radio />} />
-                                    <FormControlLabel label="No" value={false} control={<Radio />} />
+                                    onChange={(event)=>{console.log(event.target.value);this.setState({paid:event.target.value})}}>
+                                    <FormControlLabel label="Yes" value="true" control={<Radio />} />
+                                    <FormControlLabel label="No" value="false" control={<Radio />} />
                                 </RadioGroup>
                             </FormControl>
                         
