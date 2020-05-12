@@ -2,17 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {
    BrowserRouter,
-   Switch,
-   Route
+   Route,
+   Redirect
  } from "react-router-dom";
 import './index.css';
 import GLogin from './GLogin'
 import SelectClub from './SelectClub';
 import MainPage from './MainPage';
-import AddEvent from './AddEvent';
-import EventCard from './EventCard';
-import TopBar from './TopBar';
+import EventDetails from './EventDetails';
 
+import AddEvent from './AddEventNew';
+
+import EventCard from './EventCard';
+import EventPage from './EventPage';
+import TopBar from './TopBar';
+import NotAuth from './NotAuth';
+import ContainerPanel from "./base/ContainerPanel";
 
 import {Button,Grid} from '@material-ui/core/';
 
@@ -32,35 +37,60 @@ class BasicExample extends React.Component {
       cur_user:0,
       isNew:false,
       isAuth:false,
+      isOrg:false,
     }
   }
 
-  select(){
-    
-    if(this.state.isAuth){
-      
-      if(this.state.isNew){
-        
-        return(
-          <ProtectedRoute exact path="/" component={SelectClub} isAuth={this.state.isAuth} isNew={this.state.isNew} cur_user={this.state.cur_user} />
-        )
-      }
-      else{
-        
-        return(
-          <ProtectedRoute exact path="/" component={MainPage} isAuth={this.state.isAuth} isNew={this.state.isNew}  cur_user={this.state.cur_user}/>
-        )
-      }
+  Sess(){
 
-    }
+    localStorage.setItem('myCat', 'Tom');
   }
-
   render(){
 
+    const renderAuth = ()=>{
+      if(this.state.isAuth){
+        if(this.state.isNew){
+          return(<Redirect to={{pathname: "/selectclubs",}} />)
+        }
+        else{
+          return(<Redirect to={{pathname: "/dashboard",}} />)
+        }
+        
+      }
+    }
     return (
       <div>
+
+        <Route
+          exact path='/'
+          render={(props) => <GLogin {...props} onLogin={(cur_user,isNew,isAuth,isOrg)=>{this.setState({cur_user:cur_user,isNew:isNew,isAuth:isAuth,isOrg:isOrg})}} />}
+        />
+        <ProtectedRoute
+          exact path='/dashboard'
+          component={MainPage}
+          isAuth={this.state.isAuth}
+          cur_user={this.state.cur_user}
+          isOrg={this.state.isOrg}
+        />
+        <ProtectedRoute
+          exact path='/selectclubs'
+          component={SelectClub}
+          isAuth={this.state.isAuth}
+          cur_user={this.state.cur_user}
+        />
+        
+
+        {
+          renderAuth()
+        }
+        
+        
+
+        {/*
         <GLogin onLogin={(cur_user,isNew,isAuth)=>{this.setState({cur_user:cur_user,isNew:isNew,isAuth:isAuth})}} />
-        {this.select()}
+          
+          this.select()
+        */}
         
 
       </div>
@@ -77,14 +107,15 @@ export default BasicExample;
   // ========================================
   
  ReactDOM.render(
-    <BrowserRouter><BasicExample /></BrowserRouter>,
+    //<BrowserRouter><BasicExample /></BrowserRouter>,
     //<GLogin />,
     //<EventCard />,
     //<SelectClub />,
-    //<MainPage />,
+    <BrowserRouter><MainPage /></BrowserRouter>,
     //<AddEvent />,
     //<TopBar />,
     //<ModifyEvent event_id={1}/>,
+    //<NotAuth />,
     document.getElementById('root')
  );
   

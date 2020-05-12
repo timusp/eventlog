@@ -2,18 +2,22 @@ import React from 'react';
 import './index.css';
 import {Button,Box,Checkbox,FormLabel} from '@material-ui/core/';
 import TopBar from './TopBar';
-
+import {
+    Redirect
+  } from "react-router-dom";
+ 
 
 class SelectClub extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state={
-            cur_user:2,
+            cur_user:this.props.cur_user,
             clubs:[{
                 club_id:0,
                 club_name:"",
                 isChecked:false
-            }]
+            }],
+            red:null
         }
     }
     
@@ -53,6 +57,8 @@ class SelectClub extends React.Component{
             .then((res) => res.json())
             //.then((data) =>  console.log(data))
             .catch((err)=>console.log(err))
+            this.setState({red:<Redirect to={{pathname: "/dashboard",}} />})
+        
             
             
     }
@@ -69,7 +75,7 @@ class SelectClub extends React.Component{
 
     render(){
         return(
-            <div>
+            <div className="bg">
             <TopBar />
             <Box
                 display="flex"
@@ -77,7 +83,8 @@ class SelectClub extends React.Component{
                 alignItems="center"
                 minHeight="100vh"
                 >
-                <Box marginTop={-40}>
+                <div className="appContainer">
+                
                 <form
                     id="club-select"
                     action={this.props.action}
@@ -85,7 +92,7 @@ class SelectClub extends React.Component{
                     onSubmit={this.onSubmit}
                 >
                     <Box margin={2}>
-                        <FormLabel >Select your preferred Clubs: </FormLabel>
+                        <FormLabel><h5>Select your preferred Clubs: </h5></FormLabel>
                     </Box>
                     
                     {
@@ -95,6 +102,7 @@ class SelectClub extends React.Component{
                                 display="flex"
                                 alignItems="center"
                                 marginLeft={5}
+                                key={index}
                             >
                                 <Checkbox 
                                     value={club.club_id}
@@ -124,7 +132,10 @@ class SelectClub extends React.Component{
                         </Button>
                         </Box>   
                 </form>
-                </Box>
+
+                
+                </div>
+                {this.state.red}
             </Box>
             </div>
         )

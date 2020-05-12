@@ -3,6 +3,7 @@ import {Route} from 'react-router-dom'
 import GLogin from './GLogin';
 import SelectClub from './SelectClub';
 import MainPage from './MainPage';
+import NotAuth from './NotAuth';
 
 export const ProtectedRoute=({component:Component, ...rest})=>{
     
@@ -14,6 +15,9 @@ export const ProtectedRoute=({component:Component, ...rest})=>{
                     console.log(rest)
                     if(rest.isAuth){
                         return <Component {...rest} />
+                    }
+                    else{
+                        return <NotAuth />
                     }
                 
                 }

@@ -5,6 +5,7 @@ import SelectClub from './SelectClub';
 import MainPage from './MainPage';
 import TopBar from './TopBar';
 import {ProtectedRoute} from './protected.route'
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -27,6 +28,7 @@ class GLogin extends React.Component{
         isAuth:false,
         cur_user:0,
         isNew:false,
+        isOrg:false,
       }
     }
 
@@ -38,19 +40,24 @@ class GLogin extends React.Component{
 
       
           return(
-            <div>
+            <div className="bg">
             <TopBar />
                 <Box
                   display="flex"
                   justifyContent="center"
                   alignItems="center"
                   minHeight="100vh"
-                  marginTop={-10}
-                >
                   
+                  
+                >
+                  <div className="appContainer" 
+                    style={{backgroundImage: 'url(./login.png)'}}
+                  >
+
                     <Button variant="contained" color="primary" ref="gButton">
                       Login with Google</Button>
                     <p>{this.state.int}  </p>
+                  </div> 
                     
                 </Box>
 
@@ -73,10 +80,14 @@ class GLogin extends React.Component{
             })
             .then((res) => res.json())
             .then((data) =>  {
+              console.log(data)
               this.setState({cur_user:data.id})
               this.setState({isNew:data.isNew})
-              this.setState({isAuth:true})
-              this.props.onLogin(this.state.cur_user,this.state.isNew,this.state.isAuth);
+              this.setState({isOrg:data.isOrg})
+              if(data.id!=0){
+                this.setState({isAuth:true})
+              }
+              this.props.onLogin(this.state.cur_user,this.state.isNew,this.state.isAuth,this.state.isOrg);
               
             })
 
@@ -132,11 +143,12 @@ class GLogin extends React.Component{
               }
               else{
                 this.setState({int:''})
+                this.postAPI();
               }
               //YOUR CODE HERE
               //console.log("logged in!");
               //this.props.history.push("/dashboard");
-              this.postAPI();
+              
               
             }, (error) => {
               alert(JSON.stringify(error, undefined, 2));

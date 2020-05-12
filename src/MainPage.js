@@ -1,14 +1,36 @@
 import React from 'react';
 import './index.css';
-import Event from './Event'
+import EventCard from './EventCard'
+import {Button,Box,Checkbox,FormLabel, Container} from '@material-ui/core/';
+import TopBar from './TopBar';
+import {
+    Redirect
+  } from "react-router-dom";
+
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+import { ProtectedRoute } from './protected.route';
+import EventDetails from './EventDetails';
+
+
+
 
 class MainPage extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state={
-            org_flag:true,
-            cur_user:2,
+            cur_user:5,isOrg:true,
+            //cur_user:this.props.cur_user,isOrg:this.props.isOrg,
             tab:0,
+            club:null,
             events:[{
                 event_id:null,
                 club_id:null,
@@ -24,29 +46,34 @@ class MainPage extends React.Component{
                 event_reg_deadline:null,
                 modified:null,
             }],
+            red:null
         }
+        
     }
-/*
-    componentDidMount(){
-        this.getEvents();
 
+    componentDidMount(){
+        this.getEvents(0);
     }
-*/
-    getEvents () {
-        if(this.state.tab===0){
+
+    getEvents (val) {
+        console.log("tan")
+        if(val===0){
+            this.setState({tab:0})
             //get allevents
 
             fetch("http://localhost:8000/api/allevents")
             .then(res=>res.json())
             .then(res=>{
-                this.setState({events:res.data})
+                this.setState({events:res.data},console.log("changed"))
                 //console.log(res.data);
             })
             .catch(err=>err);
         
         }
-        else if(this.state.tab===1){
+        
+        else if(val===1){
             //get events for me
+            this.setState({tab:1})
             fetch("http://localhost:8000/api/myevents/?user="+this.state.cur_user)  //add user here
             .then(res=>res.json())
             .then(res=>{
@@ -56,16 +83,24 @@ class MainPage extends React.Component{
             })
             .catch(err=>err);
         }
-        else if(this.state.tab===2){
+        else if(val===2){
             //get club events ----change
-            fetch("http://localhost:8000/api/myevents/?user=")
+            this.setState({tab:2})
+            fetch("http://localhost:8000/api/allevents")
             .then(res=>res.json())
             .then(res=>{
-                this.setState({events:res.data})
+                var temp=[];
+                res.data.map((event)=>{
+                  if(event.club_id===this.state.club){
+                    temp.push(event)
+                  }
+                })
+                this.setState({events:temp})
             })
             .catch(err=>err);
         }
-        else if(this.state.tab===3){
+        else if(val===3){
+            this.setState({tab:3})
             //get registered events
             fetch("http://localhost:8000/api/regevents/?user="+this.state.cur_user)  //add user here
             .then(res=>res.json())
@@ -74,53 +109,135 @@ class MainPage extends React.Component{
             })
             .catch(err=>err);
         }
+        else if(val===4){
+            this.setState({tab:4})
+            //get registered events
+            fetch("http://localhost:8000/api/addedevents/?user="+this.state.cur_user)  //add user here
+            .then(res=>res.json())
+            .then(res=>{
+                this.setState({events:res.data})
+            })
+            .catch(err=>err);
+        }
+
+        
     }
-    addEventToggle(){
-        if(this.state.org_flag===true){
+    
+    addedEvents(){
+        if(this.state.isOrg===true){
             return(
-                <button className="addEventBtn">
-                    Add Event
-                </button>
+                <Button onClick={()=>{this.getEvents(4)}}>Added Events</Button>    
             )
+        }
+        else{
+            return(null)
         }
     }
 
+    addEventToggle(){
+        if(this.state.isOrg===true){
+            return(
+                <Fab onClick={()=>this.setState({red:<Redirect to={{pathname: "/addevent",}} />})} color="secondary" aria-label="add">
+                    <AddIcon />
+                </Fab>
+            )
+        }
+        else{
+            return(null)
+        }
+    }
+
+    dropDown(){
+        if(this.state.tab===2){
+
+            return(
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    marginTop={1}
+                >
+                <Box width={150}>
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label" value={this.state.club}>Select Club</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={this.state.club}
+                        onChange={event=>{this.setState({club:event.target.value});this.getEvents(2)}}
+                    >
+                        <MenuItem value={1}>Food Club</MenuItem>
+                        <MenuItem value={2}>Photography Club</MenuItem>
+                        <MenuItem value={3}>Rangmanch</MenuItem>
+                        <MenuItem value={4}>Workshops</MenuItem>
+                    </Select>
+                </FormControl>
+                </Box>
+                </Box>
+            )
+        }
+        else{
+            return(null)
+        }
+    }
+
+    
     render(){
        // console.log(this.state.resp[1]);
-       
-
+       document.body.style = 'background: ;';
        return(
             <div>
-                <div className="Border">
-
-                
-                    <div className="tabContainer">
-                        <button className="btnA" onClick={()=>{this.setState({tab:0})}}>All Events</button>
-                        <button className="btnA" onClick={()=>{this.setState({tab:1})}}>Events for me</button>
-                        <button className="btnA" onClick={()=>{this.setState({tab:2})}}>Clubwise Events</button>
-                        <button className="btnA" onClick={()=>{this.setState({tab:3})}}>Registered Events</button>
-                    </div>
-
-                    
-                            <div className="events">
-                                
-                                {this.getEvents()}
-                                {
-                                    this.state.events.map((item, index) => (
-                                       "issues"// <Event key={index} resp={item} />
-                                    ))
-                                }
-                          
-
-                            </div>
-                            {this.addEventToggle()}
+            <div className={this.state.overlay}></div>
+            <TopBar />
+                    <Box
+                        display="flex"
+                        justifyContent="center"
+                        marginTop={15}
+                        >
+                        <Button onClick={()=>{this.getEvents(0)}}>All Events</Button>
+                        <Button onClick={()=>{this.getEvents(1)}}>Events for me</Button>
+                        <Button onClick={()=>{this.getEvents(2)}}>Clubwise Events</Button>
+                        <Button onClick={()=>{this.getEvents(3)}}>Registered Events</Button>
                         
-
-                </div>
+                        {this.addedEvents()}
+                        <Box width={20}></Box>
+                
+                        {this.addEventToggle()}
+                        
+                    </Box>
+                    {this.dropDown()}
+                    <Box
+                        padding={5}
+                        display="flex"
+                        justifyContent="center"
+                    >
+                        <Box width={900} >
+                                    <GridList cols={3} cellHeight="35%">
+                                        {
+                                            this.state.events.map((item, index) => (
+                                                <Box key={index} marginBottom={2}>
+                                                    <GridListTile cols={1} key={index}>
+                                                        <EventCard 
+                                                            key={index} 
+                                                            resp={item} 
+                                                            added={this.state.tab} 
+                                                            onConfirm={val=>this.setState({overlay:val})}
+                                                        />
+                                                        <ProtectedRoute
+                                                            exact path='/event'
+                                                            component={EventDetails}
+                                                            resp={item}
+                                                        />
+                                                    </GridListTile>
+                                                </Box>
+                                            ))
+                                        }
+                                    </GridList>
+                        </Box>
+                 </Box>       
+                 {this.state.red}
+                 
             </div>
         )    
-    
-    
     }
 }
 export default MainPage;
