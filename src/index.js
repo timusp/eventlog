@@ -14,6 +14,8 @@ import SelectClub from './SelectClub';
 import MainPage from './MainPage';
 import EventDetails from './EventDetails';
 
+import Test from './test';
+
 //import { AUTHENTICATE_THE_USER } from './actions/types';
 
 
@@ -147,9 +149,10 @@ export default BasicExample;
   
  ReactDOM.render(
     //<BrowserRouter><BasicExample /></BrowserRouter>,
-    <GLogin />,
+    //<GLogin />,
     //<EventCard />,
     //<SelectClub />,
+    <Test />,
     //<BrowserRouter><MainPage /></BrowserRouter>,
     //<EventDetails />,
     //<AddEvent />,

@@ -1,70 +1,90 @@
 import React from 'react';
+
 import './index.css';
-import {Button,Box} from '@material-ui/core/';
-import SelectClub from './SelectClub';
-import MainPage from './MainPage';
+import {Button,Box,Checkbox,FormLabel} from '@material-ui/core/';
 import TopBar from './TopBar';
-import {ProtectedRoute} from './protected.route'
-
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-  useHistory,
-  useLocation
-} from "react-router-dom";
+    Redirect
+  } from "react-router-dom";
+import PosterComponent from './PosterComponent';
+import ContainerPanel from './base/ContainerPanel';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import login from './images/login.jpg';
+import CardMedia from '@material-ui/core/CardMedia';
 
-class GLogin extends React.Component{
+import { TextField, Radio, Select } from 'final-form-material-ui';
+import Image from 'material-ui-image';
+import { Typography, Paper, Link, Grid, CssBaseline, RadioGroup, MenuItem, FormGroup, FormControl, FormControlLabel,
+} from '@material-ui/core';
+
+
+class Test extends React.Component{
     constructor(props) {
-      super(props);
-      this.state={
-        int:"",
-        fname:null,
-        lname:null,
-        email:"",
-        resp:[{id:null,name:null,email:null}],
-        isAuth:false,
-        cur_user:0,
-        isNew:false,
-        isOrg:false,
-        logged:false,
+        super(props);
+        this.state={
+          int:"",
+          fname:null,
+          lname:null,
+          email:"",
+          resp:[{id:null,name:null,email:null}],
+          isAuth:false,
+          cur_user:0,
+          isNew:false,
+          isOrg:false,
+          logged:false,
+        }
       }
-    }
 
-
-    render(){
-      if(this.state.isAuth){
-        return(null)
-      }else{
-
-      
-          return(
-            <div className="bg">
+    render() {
+        return(
+            <ContainerPanel>
             <TopBar />
-                <Box
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  minHeight="100vh"
-                  
-                  
-                >
-                  <div className="appContainer" 
-                    style={{backgroundImage: 'url(./login.png)'}}
-                  >
+        
+                <div style={{ paddingTop: "5%", margin: 'auto', maxWidth: 900, minHeight: "100vh" }}>
+                    <CssBaseline />
 
-                    <Button variant="contained" color="primary" ref="gButton">
-                      Login with Google</Button>
-                    <p>{this.state.int}  </p>
-                  </div> 
+                    <Paper style={{ padding: 50, minHeight: "89vh" }}>
+
+                        <Grid container alignItems="flex-start" spacing={2} minHeight="800px" style={{padding: "12% 0 7% 0"}}>
+
                     
-                </Box>
+                            <Grid item xs={6}>
+                                    <CardMedia
+                                    component="img"
+                                    alt="Contemplative Reptile"
+                                    maxHeight="200"
+                                    padding="20"
+                                    style={{width: 400, height: "400%"}}
+                                    image={login}
+                                    title="Contemplative Reptile"
+                                    />  
+                                
+                            </Grid>
 
-            </div>
-          );
-      }
+                            <Grid item xs={6} align="center">
+                            <Box marginTop={10}>
+                                <FormLabel><h4>Welcome to AU Eventlog</h4></FormLabel>
+
+                                <Box marginTop={10}>
+                                <Grid item xs={6}>
+                                    <Button variant="contained" color="primary" ref="gButton">
+                                    Login with Google</Button>
+                                </Grid>
+                                    
+                                    <Grid item xs={6}>{this.state.int}</Grid>
+                                </Box>
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </Paper>
+                </div>
+                    
+            </ContainerPanel>
+        )
+
+
     }
 
     postAPI(){
@@ -142,7 +162,7 @@ class GLogin extends React.Component{
               this.setState({lname: profile.getFamilyName()});
               this.setState({email: profile.getEmail()});
               if(!profile.getEmail().includes('@ahduni.edu.in')){
-                this.setState({int:'Please Login with University Mail'})
+                this.setState({int:'Please Login with University Mail to continue'})
               }
               else{
                 this.setState({int:''})
@@ -157,10 +177,9 @@ class GLogin extends React.Component{
               
           });
 
-        }
+    }
   
-  
-  }
 
+}
 
-  export default GLogin;
+export default Test;
