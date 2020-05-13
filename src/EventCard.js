@@ -103,11 +103,18 @@ class EventCard extends React.Component{
                 body: JSON.stringify(req)
             })
             .then((res) => res.json())
-            .then((data)=>console.log(data))
+            //.then((data)=>console.log(data))
             .catch((err)=>console.log(err))
     }
 
+    componentWillMount(){
+        
+    }
+
+    
+
     render(){
+        //this.isRegistered(this.props.resp.event_id)
         return(
             <Container margin={1}>
               

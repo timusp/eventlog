@@ -10,6 +10,7 @@ import Menu from '@material-ui/core/Menu';
 import Box from '@material-ui/core/Box';
 import logo from './aulogo.png'
 
+import {Redirect} from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,6 +31,8 @@ const useStyles = makeStyles((theme) => ({
 export default function MenuAppBar() {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(true);
+  const [redClub, setRedClub] = React.useState(true);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -44,13 +47,13 @@ export default function MenuAppBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const handleClub = () => {
-    
+    setRedClub(<Redirect to={{pathname: "/selectclubs",}} />);
   };
   const handleOut = () => {
     
   };
-
   return (
     <div className={classes.root}>
       
@@ -92,6 +95,7 @@ export default function MenuAppBar() {
               </Menu>
             </div>
         </Toolbar>
+        {redClub}
       </AppBar>
     </div>
   );

@@ -57,7 +57,6 @@ class MainPage extends React.Component{
     }
 
     getEvents (val) {
-        console.log("tan")
         if(val===0){
             this.setState({tab:0})
             //get allevents
@@ -65,8 +64,7 @@ class MainPage extends React.Component{
             fetch("http://localhost:8000/api/allevents")
             .then(res=>res.json())
             .then(res=>{
-                this.setState({events:res.data},console.log("changed"))
-                //console.log(res.data);
+                this.setState({events:res.data})
             })
             .catch(err=>err);
         
@@ -244,12 +242,25 @@ class MainPage extends React.Component{
             .catch(err=>err);
     }
 
-    
+    isRegistered(){
+        const req={user_id:this.props.cur_user}
+        var regs=null;
+        fetch('http://localhost:8000/api/getregistered', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(req)
+        })
+        .then((res) => res.json())
+        .then((data)=>regs=data.data)
+        .catch((err)=>console.log(err))
+    }
 
-    
+
     render(){
        // console.log(this.state.resp[1]);
-       document.body.style = 'background: ;';
+       this.isRegistered()
        return(
             <div>
                 {this.renderOverlay()
@@ -284,17 +295,15 @@ class MainPage extends React.Component{
                                                 <Box key={index} marginBottom={2}>
                                                     <GridListTile cols={1} key={index}>
                                                         <EventCard 
-                                                            key={index} 
-                                                            resp={item} 
-                                                            added={this.state.tab} 
+                                                            key={index}
+                                                            resp={item}
+                                                            added={this.state.tab}
                                                             isAuth={this.props.isAuth}
                                                             cur_user={this.props.cur_user}
                                                             onConfirm={(val)=>{
                                                                 this.setState({overlay:val,delete_id:item.event_id})
                                                             }}
                                                         />
-                                                        
-                                                        
                                                     </GridListTile>
                                                 </Box>
                                             ))

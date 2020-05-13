@@ -70,7 +70,6 @@ class BasicExample extends React.Component {
 
   componentWillMount() {
       this.documentData = JSON.parse(localStorage.getItem('document'));
-      console.log(this.documentData)
       if (localStorage.getItem('document')) {
           this.setState({
             cur_user:this.documentData.cur_user,
@@ -147,8 +146,8 @@ export default BasicExample;
   // ========================================
   
  ReactDOM.render(
-    <BrowserRouter><BasicExample /></BrowserRouter>,
-    //<GLogin />,
+    //<BrowserRouter><BasicExample /></BrowserRouter>,
+    <GLogin />,
     //<EventCard />,
     //<SelectClub />,
     //<BrowserRouter><MainPage /></BrowserRouter>,
