@@ -30,8 +30,8 @@ const imageStyle = {
 
 class AddEvent extends React.Component {    
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state={
             name:'',
             club:'',
@@ -49,6 +49,21 @@ class AddEvent extends React.Component {
             err:false,
             btnColor:"primary",
             error:{name:null,desc:null,venue:null},
+            req:{   name:null,
+                    desc:null,
+                    club:null,
+                    type:null,
+                    venue:null,
+                    poster:null,
+                    link:null,
+                    paid:null,
+                    seats:null,
+                    start_date:null,
+                    end_date:null,
+                    time:null,
+                    deadline:null,
+                    added_by:null,
+                }
             
         }
     }
@@ -79,6 +94,7 @@ class AddEvent extends React.Component {
         console.log(this.checkErr())
 
         if(!this.checkErr()){
+            console.log("ran")
             this.setState({
                 req:{name:this.state.name,
                     desc:this.state.desc,
@@ -93,9 +109,21 @@ class AddEvent extends React.Component {
                     end_date:this.state.end_date,
                     time:this.state.time,
                     deadline:this.state.deadline,
+                    added_by:this.props.added_by
                 }
-            })            
-            fetch('http://localhost:8000/api/submitevent', {
+            },()=>this.callApi()
+            )
+            
+            
+            this.setState({btnColor:"primary"})
+        }else{
+            this.setState({btnColor:"secondary"})
+        }
+                
+    }
+
+    callApi(){
+        fetch('http://localhost:8000/api/submitevent', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -105,11 +133,6 @@ class AddEvent extends React.Component {
             .then((res) => res.json())
             //.then((data) =>  console.log(data))
             .catch((err)=>console.log(err))
-            this.setState({btnColor:"primary"})
-        }else{
-            this.setState({btnColor:"secondary"})
-        }
-                
     }
     
         isTypeOk(){

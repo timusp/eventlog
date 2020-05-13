@@ -1,7 +1,7 @@
 import React from 'react';
 import './index.css';
 import EventCard from './EventCard'
-import {Button,Box,Checkbox,FormLabel, Container} from '@material-ui/core/';
+import {Grid,Button,Box,Checkbox,FormLabel, Container} from '@material-ui/core/';
 import TopBar from './TopBar';
 import {
     Redirect
@@ -46,7 +46,8 @@ class MainPage extends React.Component{
                 event_reg_deadline:null,
                 modified:null,
             }],
-            red:null
+            red:null,
+            overlay:"hidden",
         }
         
     }
@@ -180,13 +181,78 @@ class MainPage extends React.Component{
         }
     }
 
+    renderOverlay(){
+        return(<div className={this.state.overlay}>
+
+            <Box
+                
+                display="flex"
+              justifyContent="center"
+              alignItems="center"
+              minHeight="100vh"
+            >
+            <Box 
+                width={400}
+                display="flex"
+                height={200}
+                justifyContent="center"
+                alignItems="center"
+                
+               
+            >   <div style={{display:"flex",justifyContent:"center",alignItems:"center",backgroundColor:"white",width:"100%",height:"100%"}}>
+                
+                    <Box marginTop={-5}>
+                    <FormLabel><h5>Are you sure ?</h5></FormLabel>
+                    </Box>
+                    <Box margin={1} marginTop={10}>
+                        <Button 
+                            variant="outlined" 
+                            size="small" 
+                            color="primary"
+                            onClick={()=>{this.deleteEvent(this.state.delete_id)}}
+                        >
+                        Yes
+                        </Button>
+                    </Box>
+                
+                    <Box margin={1} marginTop={10}>
+                            <Button 
+                                hidde
+                                variant="contained" 
+                                size="small" 
+                                color="secondary"
+                                onClick={()=>{this.setState({overlay:"hidden"})}}
+                            >
+                                No
+                            </Button>
+                        </Box>
+                 
+
+                </div>
+                </Box>
+            </Box>
+        </div>)
+    }
+
+    deleteEvent(event_id){
+        console.log(event_id)
+        fetch("http://localhost:8000/api/eventdelete/?"+event_id)
+            .then(res=>res.json())
+            .then(res=>{
+                //console.log(res.data);
+            })
+            .catch(err=>err);
+    }
+
+
     
     render(){
        // console.log(this.state.resp[1]);
        document.body.style = 'background: ;';
        return(
             <div>
-            <div className={this.state.overlay}></div>
+                {this.renderOverlay()
+                }
             <TopBar />
                     <Box
                         display="flex"
@@ -220,7 +286,9 @@ class MainPage extends React.Component{
                                                             key={index} 
                                                             resp={item} 
                                                             added={this.state.tab} 
-                                                            onConfirm={val=>this.setState({overlay:val})}
+                                                            onConfirm={(val)=>{
+                                                                this.setState({overlay:val,delete_id:item.event_id})
+                                                            }}
                                                         />
                                                         <ProtectedRoute
                                                             exact path='/event'

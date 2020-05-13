@@ -29,6 +29,7 @@ class GLogin extends React.Component{
         cur_user:0,
         isNew:false,
         isOrg:false,
+        logged:false,
       }
     }
 
@@ -68,7 +69,7 @@ class GLogin extends React.Component{
 
     postAPI(){
         
-        const reqs={email:this.state.email};
+        const reqs={email:this.state.email,name:this.state.fname+' '+this.state.lname};
         //console.log(reqs);
 
         fetch('http://localhost:8000/api/userauth', {
@@ -84,10 +85,12 @@ class GLogin extends React.Component{
               this.setState({cur_user:data.id})
               this.setState({isNew:data.isNew})
               this.setState({isOrg:data.isOrg})
+              this.setState({logged:data.logged})
+
               if(data.id!=0){
                 this.setState({isAuth:true})
               }
-              this.props.onLogin(this.state.cur_user,this.state.isNew,this.state.isAuth,this.state.isOrg);
+              this.props.onLogin(this.state.cur_user,this.state.isNew,this.state.isAuth,this.state.isOrg,this.state.logged);
               
             })
 

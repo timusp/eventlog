@@ -3,13 +3,20 @@ import ReactDOM from 'react-dom';
 import {
    BrowserRouter,
    Route,
-   Redirect
+   Redirect,
+   Router,
+   browserHistory,
+   IndexRoute
  } from "react-router-dom";
 import './index.css';
 import GLogin from './GLogin'
 import SelectClub from './SelectClub';
 import MainPage from './MainPage';
 import EventDetails from './EventDetails';
+
+//import { AUTHENTICATE_THE_USER } from './actions/types';
+
+
 
 import AddEvent from './AddEventNew';
 
@@ -47,7 +54,10 @@ class BasicExample extends React.Component {
   }
   render(){
 
+
+
     const renderAuth = ()=>{
+
       if(this.state.isAuth){
         if(this.state.isNew){
           return(<Redirect to={{pathname: "/selectclubs",}} />)
@@ -63,7 +73,7 @@ class BasicExample extends React.Component {
 
         <Route
           exact path='/'
-          render={(props) => <GLogin {...props} onLogin={(cur_user,isNew,isAuth,isOrg)=>{this.setState({cur_user:cur_user,isNew:isNew,isAuth:isAuth,isOrg:isOrg})}} />}
+          render={(props) => <GLogin {...props} onLogin={(cur_user,isNew,isAuth,isOrg,logged)=>{this.setState({cur_user:cur_user,isNew:isNew,isAuth:isAuth,isOrg:isOrg})}} />}
         />
         <ProtectedRoute
           exact path='/dashboard'
@@ -75,6 +85,12 @@ class BasicExample extends React.Component {
         <ProtectedRoute
           exact path='/selectclubs'
           component={SelectClub}
+          isAuth={this.state.isAuth}
+          cur_user={this.state.cur_user}
+        />
+        <ProtectedRoute
+          exact path='/addevent'
+          component={AddEvent}
           isAuth={this.state.isAuth}
           cur_user={this.state.cur_user}
         />
@@ -111,8 +127,8 @@ export default BasicExample;
     //<GLogin />,
     //<EventCard />,
     //<SelectClub />,
-    //<BrowserRouter><MainPage /></BrowserRouter>,
-    <AddEvent />,
+    <BrowserRouter><MainPage /></BrowserRouter>,
+    //<AddEvent />,
     //<TopBar />,
     //<ModifyEvent event_id={1}/>,
     //<NotAuth />,
