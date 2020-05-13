@@ -27,7 +27,7 @@ class MainPage extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            cur_user:5,isOrg:true,
+            //cur_user:5,isOrg:true,
             //cur_user:this.props.cur_user,isOrg:this.props.isOrg,
             tab:0,
             club:null,
@@ -75,7 +75,7 @@ class MainPage extends React.Component{
         else if(val===1){
             //get events for me
             this.setState({tab:1})
-            fetch("http://localhost:8000/api/myevents/?user="+this.state.cur_user)  //add user here
+            fetch("http://localhost:8000/api/myevents/?user="+this.props.cur_user)  //add user here
             .then(res=>res.json())
             .then(res=>{
                 this.setState({events:res.data})
@@ -103,7 +103,7 @@ class MainPage extends React.Component{
         else if(val===3){
             this.setState({tab:3})
             //get registered events
-            fetch("http://localhost:8000/api/regevents/?user="+this.state.cur_user)  //add user here
+            fetch("http://localhost:8000/api/regevents/?user="+this.props.cur_user)  //add user here
             .then(res=>res.json())
             .then(res=>{
                 this.setState({events:res.data})
@@ -113,7 +113,7 @@ class MainPage extends React.Component{
         else if(val===4){
             this.setState({tab:4})
             //get registered events
-            fetch("http://localhost:8000/api/addedevents/?user="+this.state.cur_user)  //add user here
+            fetch("http://localhost:8000/api/addedevents/?user="+this.props.cur_user)  //add user here
             .then(res=>res.json())
             .then(res=>{
                 this.setState({events:res.data})
@@ -125,9 +125,9 @@ class MainPage extends React.Component{
     }
     
     addedEvents(){
-        if(this.state.isOrg===true){
+        if(this.props.isOrg===true){
             return(
-                <Button onClick={()=>{this.getEvents(4)}}>Added Events</Button>    
+                <Button variant={this.state.tab===4?"contained":""} color={this.state.tab===4?"primary":""} onClick={()=>{this.getEvents(4)}}>Added Events</Button>    
             )
         }
         else{
@@ -136,7 +136,7 @@ class MainPage extends React.Component{
     }
 
     addEventToggle(){
-        if(this.state.isOrg===true){
+        if(this.props.isOrg){
             return(
                 <Fab onClick={()=>this.setState({red:<Redirect to={{pathname: "/addevent",}} />})} color="secondary" aria-label="add">
                     <AddIcon />
@@ -244,6 +244,7 @@ class MainPage extends React.Component{
             .catch(err=>err);
     }
 
+    
 
     
     render(){
@@ -253,16 +254,16 @@ class MainPage extends React.Component{
             <div>
                 {this.renderOverlay()
                 }
-            <TopBar />
+            <TopBar cur_user={this.props.cur_user} isAuth={this.props.isAuth} />
                     <Box
                         display="flex"
                         justifyContent="center"
                         marginTop={15}
                         >
-                        <Button onClick={()=>{this.getEvents(0)}}>All Events</Button>
-                        <Button onClick={()=>{this.getEvents(1)}}>Events for me</Button>
-                        <Button onClick={()=>{this.getEvents(2)}}>Clubwise Events</Button>
-                        <Button onClick={()=>{this.getEvents(3)}}>Registered Events</Button>
+                        <Button variant={this.state.tab===0?"contained":""} color={this.state.tab===0?"primary":""} onClick={()=>{this.getEvents(0)}}>All Events</Button>
+                        <Button variant={this.state.tab===1?"contained":""} color={this.state.tab===1?"primary":""} onClick={()=>{this.getEvents(1)}}>Events for me</Button>
+                        <Button variant={this.state.tab===2?"contained":""} color={this.state.tab===2?"primary":""} onClick={()=>{this.getEvents(2)}}>Clubwise Events</Button>
+                        <Button variant={this.state.tab===3?"contained":""} color={this.state.tab===3?"primary":""} onClick={()=>{this.getEvents(3)}}>Registered Events</Button>
                         
                         {this.addedEvents()}
                         <Box width={20}></Box>
@@ -286,15 +287,14 @@ class MainPage extends React.Component{
                                                             key={index} 
                                                             resp={item} 
                                                             added={this.state.tab} 
+                                                            isAuth={this.props.isAuth}
+                                                            cur_user={this.props.cur_user}
                                                             onConfirm={(val)=>{
                                                                 this.setState({overlay:val,delete_id:item.event_id})
                                                             }}
                                                         />
-                                                        <ProtectedRoute
-                                                            exact path='/event'
-                                                            component={EventDetails}
-                                                            resp={item}
-                                                        />
+                                                        
+                                                        
                                                     </GridListTile>
                                                 </Box>
                                             ))

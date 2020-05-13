@@ -48,32 +48,57 @@ class BasicExample extends React.Component {
     }
   }
 
-  Sess(){
+  renderAuth(){
 
-    localStorage.setItem('myCat', 'Tom');
+    
+    if(this.state.isAuth){
+      localStorage.setItem('document',JSON.stringify(this.state));
+      if(this.state.isNew){
+        return(<Redirect to={{pathname: "/selectclubs",}} />)
+      }
+      else{
+        return(<Redirect to={{pathname: "/dashboard",}} />)
+      }
+
+      
+    }
+    else{
+      return(<Redirect to={{pathname: "/",}} />)
+    }
   }
+
+
+  componentWillMount() {
+      this.documentData = JSON.parse(localStorage.getItem('document'));
+      console.log(this.documentData)
+      if (localStorage.getItem('document')) {
+          this.setState({
+            cur_user:this.documentData.cur_user,
+            isNew:this.documentData.isNew,
+            isAuth:this.documentData.isAuth,
+            isOrg:this.documentData.isOrg,
+        })
+      } else {
+          this.setState({
+            cur_user:0,
+            isNew:false,
+            isAuth:false,
+            isOrg:false,
+          })
+      }
+  }
+
   render(){
 
 
 
-    const renderAuth = ()=>{
 
-      if(this.state.isAuth){
-        if(this.state.isNew){
-          return(<Redirect to={{pathname: "/selectclubs",}} />)
-        }
-        else{
-          return(<Redirect to={{pathname: "/dashboard",}} />)
-        }
-        
-      }
-    }
     return (
       <div>
 
         <Route
           exact path='/'
-          render={(props) => <GLogin {...props} onLogin={(cur_user,isNew,isAuth,isOrg,logged)=>{this.setState({cur_user:cur_user,isNew:isNew,isAuth:isAuth,isOrg:isOrg})}} />}
+          render={(props) => <GLogin {...props} onLogin={(cur_user,isNew,isAuth,isOrg)=>{this.setState({cur_user:cur_user,isNew:isNew,isAuth:isAuth,isOrg:isOrg})}} />}
         />
         <ProtectedRoute
           exact path='/dashboard'
@@ -94,10 +119,9 @@ class BasicExample extends React.Component {
           isAuth={this.state.isAuth}
           cur_user={this.state.cur_user}
         />
-        
 
         {
-          renderAuth()
+          this.renderAuth()
         }
         
         
@@ -123,11 +147,12 @@ export default BasicExample;
   // ========================================
   
  ReactDOM.render(
-    //<BrowserRouter><BasicExample /></BrowserRouter>,
+    <BrowserRouter><BasicExample /></BrowserRouter>,
     //<GLogin />,
     //<EventCard />,
     //<SelectClub />,
-    <BrowserRouter><MainPage /></BrowserRouter>,
+    //<BrowserRouter><MainPage /></BrowserRouter>,
+    //<EventDetails />,
     //<AddEvent />,
     //<TopBar />,
     //<ModifyEvent event_id={1}/>,

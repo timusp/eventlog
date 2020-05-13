@@ -10,6 +10,17 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import {
+    //BrowserRouter,
+    //Route,
+    Redirect,
+    //Router,
+    //browserHistory,
+    //IndexRoute
+  } from "react-router-dom";
+import {ProtectedRoute} from './protected.route'
+import EventDetails from './EventDetails'
+
 import foodImg from './images/food_club.png'
 import artImg from './images/art_club.png'
 import photoImg from './images/photo_club.png'
@@ -26,22 +37,19 @@ class EventCard extends React.Component{
         //console.log(this.props);
         this.state={
             confirm:null,
-            
+            eventRed:null,
         }
         
 
     }
     
 
-    /*
+    
     componentWillReceiveProps(props) {
-        this.setState({resp: props.resp})
-    }
-    */
-    toggleExpand = ()=>{
-        this.setState({expand:!this.state.expand})
-    }
 
+    }
+    
+  
     renderButtons(){
         if(this.props.added===4){
             return(
@@ -63,11 +71,11 @@ class EventCard extends React.Component{
             return(
                 <CardActions>
                     <Button variant="outlined" size="small" color="primary"
-                     
+                        onClick={()=>this.setState({eventRed:<Redirect to={{pathname: "/event",state:{event:this.props.resp}}} />})}
                     >
                         More
                     </Button>
-                    <Button variant="contained" size="small" color="primary">
+                    <Button variant="contained" size="small" color="primary" onClick={()=>this.register(this.props.resp.event_id)}>
                         Register
                     </Button>
                 </CardActions>
@@ -85,9 +93,25 @@ class EventCard extends React.Component{
         return cardImage
     }
 
+    register(event_id){
+        const req={user_id:this.props.cur_user,event_id:event_id}
+        fetch('http://localhost:8000/api/eventregister', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(req)
+            })
+            .then((res) => res.json())
+            .then((data)=>console.log(data))
+            .catch((err)=>console.log(err))
+    }
+
     render(){
         return(
             <Container margin={1}>
+              
+            
                 <Card>
                 <CardActionArea>
                     
@@ -112,6 +136,8 @@ class EventCard extends React.Component{
                     </CardContent>
                 </CardActionArea>
                 {this.renderButtons()}
+                {this.state.eventRed}
+                
                 </Card>
             </Container>
         )

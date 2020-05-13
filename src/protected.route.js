@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route} from 'react-router-dom'
+import {Route,Redirect} from 'react-router-dom'
 import GLogin from './GLogin';
 import SelectClub from './SelectClub';
 import MainPage from './MainPage';
@@ -17,7 +17,7 @@ export const ProtectedRoute=({component:Component, ...rest})=>{
                         return <Component {...rest} />
                     }
                     else{
-                        return <NotAuth />
+                        return <Redirect to={{pathname: "/",}} />
                     }
                 
                 }

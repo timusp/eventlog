@@ -1,6 +1,7 @@
 import React from 'react';
 import {Box} from '@material-ui/core';
 import TopBar from './TopBar';
+import { Redirect } from 'react-router-dom';
 
 const NotAuth=()=>{
     return(
@@ -12,7 +13,8 @@ const NotAuth=()=>{
                 alignItems="center"
                 minHeight="100vh"
             >    
-            yo
+                Not Authorized. Redirecting...
+                <Redirect  to={{pathname: "/",}} />
             </Box>
         </div>
     )

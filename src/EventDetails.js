@@ -16,6 +16,8 @@ import EventIcon from '@material-ui/icons/Event';
 import MoneyIcon from '@material-ui/icons/Money';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
+import {ProtectedRoute} from './protected.route'
+
 // Picker
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -26,13 +28,20 @@ import {
 
 
 class EventDetails extends React.Component { 
+    constructor(props){
+        super(props);
 
+        
+    }
 
     render() {
 
+        
         return(
             
+            
             <ContainerPanel>
+          
                 <div style={{ padding: 16, margin: 'auto', maxWidth: 800 }}>
                 <CssBaseline />
 

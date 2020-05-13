@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './index.css';
-import Event from './Event';
+import Event from './EventCard';
 import EventCard from './base/EventCard';
 import ContainerPanel from "./base/ContainerPanel";
 import { Navbar, Nav, FormControl, Button, Form } from 'react-bootstrap';

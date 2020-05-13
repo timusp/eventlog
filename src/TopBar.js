@@ -44,6 +44,12 @@ export default function MenuAppBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleClub = () => {
+    
+  };
+  const handleOut = () => {
+    
+  };
 
   return (
     <div className={classes.root}>
@@ -81,8 +87,8 @@ export default function MenuAppBar() {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Select Clubs</MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <MenuItem onClick={handleClub}>Select Clubs</MenuItem>
+                <MenuItem onClick={handleOut}>Logout</MenuItem>
               </Menu>
             </div>
         </Toolbar>

@@ -90,7 +90,7 @@ class GLogin extends React.Component{
               if(data.id!=0){
                 this.setState({isAuth:true})
               }
-              this.props.onLogin(this.state.cur_user,this.state.isNew,this.state.isAuth,this.state.isOrg,this.state.logged);
+              this.props.onLogin(this.state.cur_user,this.state.isNew,this.state.isAuth,this.state.isOrg);
               
             })
 
@@ -154,7 +154,7 @@ class GLogin extends React.Component{
               
               
             }, (error) => {
-              alert(JSON.stringify(error, undefined, 2));
+              
           });
 
         }
