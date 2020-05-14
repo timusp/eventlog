@@ -17,6 +17,7 @@ import MoneyIcon from '@material-ui/icons/Money';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
+import Box from '@material-ui/core/Box';
 
 import {ProtectedRoute} from './protected.route'
 
@@ -50,12 +51,98 @@ class EventDetails extends React.Component {
         }
         
     }
-    clubName(val){
-        //if()
-
-    }
     componentDidMount(){
         this.setState({event:this.props.event})
+        
+    }
+
+    getClubName(club_id){
+        if(club_id===1){
+            return("Workshop")
+        }
+        else if(club_id===2){
+            return("Talk")
+        }
+        else if(club_id===3){
+            return("IEEE SB")
+        }
+        else if(club_id===4){
+            return("IEEE WIE")
+        }
+        else if(club_id===5){
+            return("Social Service Forum")
+        }
+        else if(club_id===6){
+            return("Fitness Club")
+        }
+        else if(club_id===7){
+            return("Food Club")
+        }
+        else if(club_id===8){
+            return("Sports Club")
+        }
+        else if(club_id===9){
+            return("Photography Club")
+        }
+        else if(club_id===10){
+            return("Quiz Club")
+        }
+    }
+    renderRegBtn(){
+        if(this.state.reg){
+            return(
+                <Button variant="contained" size="small" color="secondary" onClick={()=>this.unregister(this.props.event.event_id)}>
+                        Unregister
+                </Button>
+            )
+        }else{
+            return(
+                <Button variant="contained" size="small" color="primary" onClick={()=>this.register(this.props.event.event_id)}>
+                        Register
+                </Button>
+            )
+        }
+    }
+    isRegistered(){
+        const req={user_id:this.props.cur_user,event_id:this.props.event.event_id}
+        fetch('http://localhost:8000/api/getregs', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(req)
+        })
+        .then((res) => res.json())
+        .then((data)=>this.setState({reg:data.reg}))
+        .catch((err)=>console.log(err))
+    }
+
+    register(event_id){
+        const req={user_id:this.props.cur_user,event_id:event_id}
+        fetch('http://localhost:8000/api/eventregister', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(req)
+            })
+            .then((res) => res.json())
+            .catch((err)=>console.log(err))
+            this.setState({temp:!this.state.temp},()=>this.isRegistered())
+        }
+
+    unregister(event_id){
+        const req={user_id:this.props.cur_user,event_id:event_id}
+        fetch('http://localhost:8000/api/unregister', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(req)
+            })
+            .then((res) => res.json())
+            .catch((err)=>console.log(err))
+        this.setState({temp:!this.state.temp},()=>this.isRegistered())
     }
 
     render() {
@@ -91,15 +178,18 @@ class EventDetails extends React.Component {
                         <Grid item xs={12} align="center">
                         <Grid container alignItems="flex-start" spacing={2}>
 
-                            <Grid item xs={12} align="center" style={{marginLeft: "5%", marginRight: "5%"}}>
-                                <Typography align="center" component="h1" style={{paddingBottom: 20, paddingTop:20,}} gutterBottom>
-                                    {this.state.event.type}
+                            <Grid item xs={12} align="left" style={{marginLeft: "5%", marginRight: "5%"}}>
+                                <Typography align="left" component="h1" style={{paddingBottom: 10, paddingTop:10,}} gutterBottom>
+                                {this.state.event.event_type} Event
                                 </Typography>
-                                <Typography align="center" component="h1" style={{paddingBottom: 20, paddingTop:20,}} gutterBottom>
-                                    {this.clubName()}
+                                <Typography align="left" component="h1" style={{paddingBottom: 10, paddingTop:10,}} gutterBottom>
+                                    {this.getClubName(this.state.event.club_id)}
                                 </Typography>
-                                <Typography align="center" component="h1" style={{paddingBottom: 20, paddingTop:20,}} gutterBottom>
-                                    {this.state.event.event_desc}
+                                <Typography align="left" component="h1" style={{paddingBottom: 10, paddingTop:10,}}>
+                                    Description: 
+                                </Typography>
+                                <Typography align="left" component="h2" style={{paddingBottom: 10, paddingTop:10,}} gutterBottom>
+                                {this.state.event.event_desc}
                                 </Typography>
                             </Grid>
 
@@ -120,8 +210,24 @@ class EventDetails extends React.Component {
                             <Grid item xs={6} align="left" style={{paddingRight: "0%"}}>
                             <AccessTimeIcon />
                             {this.state.event.event_time}
+                            
+                            
+                            
                         </Grid>
+                        
                         </Grid>
+                        <Box marginTop={10} display="flex">
+                            <Grid item xs={6} >
+                                <Button variant="contained" size="small" color="secondary" onClick>
+                                        Back
+                                </Button>
+                            </Grid>
+                            <Grid item xs={6} align="center">
+
+                                    {this.renderRegBtn()}
+
+                            </Grid>
+                            </Box>
                         </Grid>
                 </Grid>
                 </ Paper>

@@ -1,52 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import {
    BrowserRouter,
    Route,
    Redirect,
-   Router,
-   browserHistory,
-   IndexRoute
+//   browserHistory,
  } from "react-router-dom";
+
 import './index.css';
 import GLogin from './GLogin'
 import SelectClub from './SelectClub';
 import MainPage from './MainPage';
 import EventDetails from './EventDetails';
-
-import Test from './test';
-
-//import { AUTHENTICATE_THE_USER } from './actions/types';
-
-
-
 import AddEvent from './AddEventNew';
+import AboutUs from './AboutUsNew';
+import AboutCard from './AboutCardNew';
+import Footer from './Footer';
+
 import ModifyEvent from './ModifyEventNew';
+import { ProtectedRoute } from './protected.route';
 
-import EventCard from './EventCard';
-import EventPage from './EventPage';
-import TopBar from './TopBar';
-import NotAuth from './NotAuth';
-import ContainerPanel from "./base/ContainerPanel";
-
-import {Button,Grid} from '@material-ui/core/';
+//import Test from './test';
 
 
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { ProtectedRoute } from './protected.route';
 
 
 
 class BasicExample extends React.Component {
   constructor(){
     super()
-    //this._child= React.createRef();
     this.state={
       cur_user:0,
-      isNew:false,
-      isAuth:false,
-      isOrg:false,
+      is_new:false,
+      is_auth:false,
+      is_org:false,
     }
     
   }
@@ -54,16 +44,14 @@ class BasicExample extends React.Component {
   renderAuth(){
 
     
-    if(this.state.isAuth){
+    if(this.state.is_auth){
       localStorage.setItem('document',JSON.stringify(this.state));
-      if(this.state.isNew){
+      if(this.state.is_new){
         return(<Redirect to={{pathname: "/selectclubs",}} />)
       }
       else{
         return(<Redirect to={{pathname: "/dashboard",}} />)
       }
-
-      
     }
     else{
       return(<Redirect to={{pathname: "/",}} />)
@@ -76,16 +64,16 @@ class BasicExample extends React.Component {
       if (localStorage.getItem('document')) {
           this.setState({
             cur_user:this.documentData.cur_user,
-            isNew:this.documentData.isNew,
-            isAuth:this.documentData.isAuth,
-            isOrg:this.documentData.isOrg,
+            is_new:this.documentData.is_new,
+            is_auth:this.documentData.is_auth,
+            is_org:this.documentData.is_org,
         })
       } else {
           this.setState({
             cur_user:0,
-            isNew:false,
-            isAuth:false,
-            isOrg:false,
+            is_new:false,
+            is_auth:false,
+            is_org:false,
           })
       }
   }
@@ -97,40 +85,46 @@ class BasicExample extends React.Component {
 
         <Route
           exact path='/'
-          render={(props) => <GLogin {...props} onLogin={(cur_user,isNew,isAuth,isOrg)=>{this.setState({cur_user:cur_user,isNew:isNew,isAuth:isAuth,isOrg:isOrg})}} />}
+          render={(props) => <GLogin {...props} onLogin={(cur_user,is_new,is_auth,is_org)=>{this.setState({cur_user:cur_user,is_new:is_new,is_auth:is_auth,is_org:is_org})}} />}
         />
         <ProtectedRoute
           exact path='/dashboard'
           component={MainPage}
-          isAuth={this.state.isAuth}
+          is_auth={this.state.is_auth}
           cur_user={this.state.cur_user}
-          isOrg={this.state.isOrg}
+          is_org={this.state.is_org}
           onRed={(redevent)=>this.setState({redevent})}
         />
         <ProtectedRoute
           exact path='/selectclubs'
           component={SelectClub}
-          isAuth={this.state.isAuth}
+          is_auth={this.state.is_auth}
           cur_user={this.state.cur_user}
         />
         <ProtectedRoute
           exact path='/addevent'
           component={AddEvent}
-          isAuth={this.state.isAuth}
+          is_auth={this.state.is_auth}
           cur_user={this.state.cur_user}
         />
         <ProtectedRoute
           exact path='/modifyevent'
           component={ModifyEvent}
           event={this.state.redevent}
-          isAuth={this.state.isAuth}
+          is_auth={this.state.is_auth}
           cur_user={this.state.cur_user}
         />
         <ProtectedRoute
           exact path='/event'
           component={EventDetails}
           event={this.state.redevent}
-          isAuth={this.state.isAuth}
+          is_auth={this.state.is_auth}
+          cur_user={this.state.cur_user}
+        />
+        <ProtectedRoute
+          exact path='/aboutus'
+          component={AboutUs}
+          is_auth={this.state.is_auth}
           cur_user={this.state.cur_user}
         />
 
@@ -140,18 +134,10 @@ class BasicExample extends React.Component {
         
         
 
-        {/*
-        <GLogin onLogin={(cur_user,isNew,isAuth)=>{this.setState({cur_user:cur_user,isNew:isNew,isAuth:isAuth})}} />
-          
-          this.select()
-        */}
-        
-
       </div>
     )}
   componentDidMount() {
-    //this.setState(({cur_user:this._child.current.getCurUser()}))
-  }
+    }
 };
 export default BasicExample;
 

@@ -12,6 +12,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import image from './images/clubpage.png';
+import Footer from './Footer';
 
 import { TextField, Radio, Select } from 'final-form-material-ui';
 import Image from 'material-ui-image';
@@ -23,8 +24,8 @@ class SelectClubs extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            cur_user:5,
-            //cur_user:this.props.cur_user,
+            //cur_user:5,
+            cur_user:this.props.cur_user,
             clubs:[{
                 club_id:0,
                 club_name:"",
@@ -77,7 +78,7 @@ class SelectClubs extends React.Component{
         let req=[];
         this.state.clubs.map((club)=>{
             if(club.isChecked===true){
-                req.push({cur_user:this.state.cur_user,club_id:club.club_id})
+                req.push({user_id:this.state.cur_user,club_id:club.club_id})
             }
         })
         

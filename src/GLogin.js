@@ -3,45 +3,35 @@ import React from 'react';
 import './index.css';
 import {Button,Box,Checkbox,FormLabel} from '@material-ui/core/';
 import TopBar from './TopBar';
-import {
-    Redirect
-  } from "react-router-dom";
-import PosterComponent from './PosterComponent';
+import Footer from './Footer';
 import ContainerPanel from './base/ContainerPanel';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import login from './images/login.jpg';
 import CardMedia from '@material-ui/core/CardMedia';
 
-import { TextField, Radio, Select } from 'final-form-material-ui';
-import Image from 'material-ui-image';
-import { Typography, Paper, Link, Grid, CssBaseline, RadioGroup, MenuItem, FormGroup, FormControl, FormControlLabel,
-} from '@material-ui/core';
+import {Paper, Grid, CssBaseline } from '@material-ui/core';
 
 
-class Test extends React.Component{
+class GLogin extends React.Component{
     constructor(props) {
         super(props);
         this.state={
           int:"",
           fname:null,
           lname:null,
-          email:"",
+          mail:"",
           resp:[{id:null,name:null,email:null}],
-          isAuth:false,
+          is_auth:false,
           cur_user:0,
-          isNew:false,
-          isOrg:false,
-          logged:false,
+          is_new:false,
+          is_org:false,
         }
       }
 
     render() {
         return(
+          <div>
             <ContainerPanel>
             <TopBar />
-        
                 <div style={{ paddingTop: "5%", margin: 'auto', maxWidth: 900, minHeight: "100vh" }}>
                     <CssBaseline />
 
@@ -53,20 +43,18 @@ class Test extends React.Component{
                             <Grid item xs={6}>
                                     <CardMedia
                                     component="img"
-                                    alt="Contemplative Reptile"
                                     maxHeight="200"
                                     padding="20"
                                     style={{width: 400, height: "400%"}}
                                     image={login}
-                                    title="Contemplative Reptile"
                                     />  
                                 
                             </Grid>
 
                             <Grid item xs={6} align="center">
-                            <Box marginTop={10}>
-                                <FormLabel><h4>Welcome to AU Eventlog</h4></FormLabel>
-
+                            <Box marginTop={10}> 
+                                <FormLabel><h5>Welcome to</h5></FormLabel>
+                                <FormLabel><h4>AU Eventlog</h4></FormLabel>
                                 <Box marginTop={10}>
                                 <Grid item xs={6}>
                                     <Button variant="contained" color="primary" ref="gButton">
@@ -82,6 +70,8 @@ class Test extends React.Component{
                 </div>
                     
             </ContainerPanel>
+            <Footer />
+            </div>
         )
 
 
@@ -89,7 +79,7 @@ class Test extends React.Component{
 
     postAPI(){
         
-        const reqs={email:this.state.email,name:this.state.fname+' '+this.state.lname};
+        const reqs={user_mail:this.state.user_mail,name:this.state.fname+' '+this.state.lname};
         //console.log(reqs);
 
         fetch('http://localhost:8000/api/userauth', {
@@ -103,14 +93,13 @@ class Test extends React.Component{
             .then((data) =>  {
               console.log(data)
               this.setState({cur_user:data.id})
-              this.setState({isNew:data.isNew})
-              this.setState({isOrg:data.isOrg})
-              this.setState({logged:data.logged})
+              this.setState({is_new:data.is_new})
+              this.setState({is_org:data.is_org})
 
               if(data.id!=0){
-                this.setState({isAuth:true})
+                this.setState({is_auth:true})
               }
-              this.props.onLogin(this.state.cur_user,this.state.isNew,this.state.isAuth,this.state.isOrg);
+              this.props.onLogin(this.state.cur_user,this.state.is_new,this.state.is_auth,this.state.is_org);
               
             })
 
@@ -152,15 +141,9 @@ class Test extends React.Component{
             (googleUser) => {
            
               let profile = googleUser.getBasicProfile();
-              //console.log('Token || ' + googleUser.getAuthResponse().id_token);
-              //console.log('ID: ' + profile.getId());
-              //console.log('Image URL: ' + profile.getImageUrl());
-              //console.log('firstName: ' + profile.getGivenName());
-              //console.log('lastName: ' + profile.getFamilyName());
-              //console.log('Email: ' + profile.getEmail());
               this.setState({fname: profile.getGivenName()});
               this.setState({lname: profile.getFamilyName()});
-              this.setState({email: profile.getEmail()});
+              this.setState({user_mail: profile.getEmail()});
               if(!profile.getEmail().includes('@ahduni.edu.in')){
                 this.setState({int:'Please Login with University Mail to continue'})
               }
@@ -182,4 +165,4 @@ class Test extends React.Component{
 
 }
 
-export default Test;
+export default GLogin;

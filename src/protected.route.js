@@ -1,9 +1,5 @@
 import React from 'react';
 import {Route,Redirect} from 'react-router-dom'
-import GLogin from './GLogin';
-import SelectClub from './SelectClub';
-import MainPage from './MainPage';
-import NotAuth from './NotAuth';
 
 export const ProtectedRoute=({component:Component, ...rest})=>{
     
@@ -13,7 +9,7 @@ export const ProtectedRoute=({component:Component, ...rest})=>{
             render={
                 ()=>{
                     console.log(rest)
-                    if(rest.isAuth){
+                    if(rest.is_auth){
                         return <Component {...rest} />
                     }
                     else{
@@ -25,18 +21,3 @@ export const ProtectedRoute=({component:Component, ...rest})=>{
         />
     )
 }
-
-/*
-export const ProtectedRoute=({component:Component, ...rest})=>{
-    return(
-        <Route {...rest} render={
-            props=>{
-               if(props.isAuth){
-                return <Component {...rest} />
-               }
-            }
-        } />
-    )
-}
-
-*/

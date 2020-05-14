@@ -1,11 +1,12 @@
 import React from 'react';
 import './index.css';
 import EventCard from './EventCard'
-import {Grid,Button,Box,Checkbox,FormLabel, Container} from '@material-ui/core/';
+import {Button,Box,FormLabel} from '@material-ui/core/';
 import TopBar from './TopBar';
 import {
     Redirect
   } from "react-router-dom";
+  import Footer from './Footer';
 
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -13,38 +14,31 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-
-import { ProtectedRoute } from './protected.route';
-import EventDetails from './EventDetails';
-
-
-
 
 class MainPage extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            //cur_user:5,isOrg:true,
-            //cur_user:this.props.cur_user,isOrg:this.props.isOrg,
+            cur_user:this.props.cur_user,is_org:this.props.is_org,
             tab:0,
-            club:null,
+            club_id:null,
             events:[{
                 event_id:null,
                 club_id:null,
                 event_name:null,
-                start_time:null,
-                end_time:null,
+                event_time:null,
+                start_date:null,
+                end_date:null,
                 event_venue:null,
                 event_type:null,
                 event_desc:null,
                 event_poster:null,
-                event_reg_link:null,
-                paid:false,
-                event_reg_deadline:null,
-                modified:null,
+                event_link:null,
+                event_paid:false,
+                event_deadline:null,
+                is_modified:null,
                 modification_date:null,
             }],
             red:null,
@@ -74,7 +68,7 @@ class MainPage extends React.Component{
         else if(val===1){
             //get events for me
             this.setState({tab:1})
-            fetch("http://localhost:8000/api/myevents/?user="+this.props.cur_user)  //add user here
+            fetch("http://localhost:8000/api/myevents/?user_id="+this.props.cur_user)  //add user here
             .then(res=>res.json())
             .then(res=>{
                 this.setState({events:res.data})
@@ -91,7 +85,7 @@ class MainPage extends React.Component{
             .then(res=>{
                 var temp=[];
                 res.data.map((event)=>{
-                  if(event.club_id===this.state.club){
+                  if(event.club_id===this.state.club_id){
                     temp.push(event)
                   }
                 })
@@ -102,7 +96,7 @@ class MainPage extends React.Component{
         else if(val===3){
             this.setState({tab:3})
             //get registered events
-            fetch("http://localhost:8000/api/regevents/?user="+this.props.cur_user)  //add user here
+            fetch("http://localhost:8000/api/regevents/?user_id="+this.props.cur_user)  //add user here
             .then(res=>res.json())
             .then(res=>{
                 this.setState({events:res.data})
@@ -112,7 +106,7 @@ class MainPage extends React.Component{
         else if(val===4){
             this.setState({tab:4})
             //get registered events
-            fetch("http://localhost:8000/api/addedevents/?user="+this.props.cur_user)  //add user here
+            fetch("http://localhost:8000/api/addedevents/?user_id="+this.props.cur_user)  //add user here
             .then(res=>res.json())
             .then(res=>{
                 this.setState({events:res.data})
@@ -124,7 +118,7 @@ class MainPage extends React.Component{
     }
     
     addedEvents(){
-        if(this.props.isOrg===true){
+        if(this.props.is_org===true){
             return(
                 <Button variant={this.state.tab===4?"contained":""} color={this.state.tab===4?"primary":""} onClick={()=>{this.getEvents(4)}}>Added Events</Button>    
             )
@@ -135,7 +129,7 @@ class MainPage extends React.Component{
     }
 
     addEventToggle(){
-        if(this.props.isOrg){
+        if(this.props.is_org){
             return(
                 <Fab onClick={()=>this.setState({red:<Redirect to={{pathname: "/addevent",}} />})} color="secondary" aria-label="add">
                     <AddIcon />
@@ -158,17 +152,23 @@ class MainPage extends React.Component{
                 >
                 <Box width={150}>
                 <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label" value={this.state.club}>Select Club</InputLabel>
+                    <InputLabel id="demo-simple-select-label" value={this.state.club_id}>Select Club</InputLabel>
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={this.state.club}
-                        onChange={event=>{this.setState({club:event.target.value});this.getEvents(2)}}
+                        value={this.state.club_id}
+                        onChange={event=>{this.setState({club_id:event.target.value});this.getEvents(2)}}
                     >
-                        <MenuItem value={1}>Food Club</MenuItem>
-                        <MenuItem value={2}>Photography Club</MenuItem>
-                        <MenuItem value={3}>Rangmanch</MenuItem>
-                        <MenuItem value={4}>Workshops</MenuItem>
+                        <MenuItem value={1}>Workshops</MenuItem>
+                        <MenuItem value={2}>Talk</MenuItem>
+                        <MenuItem value={3}>IEEE AU SB</MenuItem>
+                        <MenuItem value={4}>IEEE AU WIE</MenuItem>
+                        <MenuItem value={5}>Social Service Forum</MenuItem>
+                        <MenuItem value={6}>Fitness Club</MenuItem>
+                        <MenuItem value={7}>Food Club</MenuItem>
+                        <MenuItem value={8}>Sports Club</MenuItem>
+                        <MenuItem value={9}>Photography Club</MenuItem>
+                        <MenuItem value={10}>Quiz Club</MenuItem>
                     </Select>
                 </FormControl>
                 </Box>
@@ -208,7 +208,10 @@ class MainPage extends React.Component{
                             variant="outlined" 
                             size="small" 
                             color="primary"
-                            onClick={()=>{this.deleteEvent(this.state.delete_id)}}
+                            onClick={()=>{
+                                this.deleteEvent(this.state.delete_id)
+                                this.setState({overlay:"hidden"})
+                            }}
                         >
                         Yes
                         </Button>
@@ -241,7 +244,7 @@ class MainPage extends React.Component{
             })
             .catch(err=>err);
     }
-
+/*
     renderCard(){
         const myData = [].concat(this.state.events).sort((a, b) => a.modification_date > b.modification_date ? 1 : -1)
         //console.log(myData)
@@ -254,7 +257,7 @@ class MainPage extends React.Component{
                         key={index}
                         resp={item}
                         added={this.state.tab}
-                        isAuth={this.props.isAuth}
+                        isAuth={this.props.is_auth}
                         cur_user={this.props.cur_user}
                         onRed={(redevent)=>{
                             this.props.onRed(redevent)
@@ -269,14 +272,14 @@ class MainPage extends React.Component{
         ))
         )
     }
-    
+*/    
     render(){
        // console.log(this.state.resp[1]);
        return(
             <div>
                 {this.renderOverlay()
                 }
-            <TopBar cur_user={this.props.cur_user} isAuth={this.props.isAuth} />
+            <TopBar cur_user={this.props.cur_user} isAuth={this.props.is_auth} />
                     <Box
                         display="flex"
                         justifyContent="center"
@@ -300,16 +303,36 @@ class MainPage extends React.Component{
                         justifyContent="center"
                     >
                         <Box width={900} >
-                                    <GridList cols={3} cellHeight="35%">
+                                    <GridList cols={3} cellHeight="50%">
                                         {
-                                            this.renderCard()
+                                            this.state.events.map((item, index) => (
+                                            <Box key={index} marginBottom={2}>
+                                            <GridListTile cols={1} key={index}>
+                                                <EventCard 
+                                                    key={index}
+                                                    resp={item}
+                                                    added={this.state.tab}
+                                                    is_auth={this.props.is_auth}
+                                                    cur_user={this.props.cur_user}
+                                                    onRed={(redevent)=>{
+                                                        this.props.onRed(redevent)
+                                                    }}
+                                                    onConfirm={(val)=>{
+                                                        this.setState({overlay:val,delete_id:item.event_id})
+                                                    }}
+                                                />
+                                                
+                                            </GridListTile>
+                                            </Box>
+                                            ))
+                                            
                                         }
                                     </GridList>
                         </Box>
                         
                  </Box>       
                  {this.state.red}
-                 
+                 <Footer />
             </div>
         )    
     }

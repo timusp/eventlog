@@ -10,6 +10,7 @@ import TopBar from './TopBar'
 import DropDown from './base/DropDown';
 import ContainerPanel from './base/ContainerPanel';
 import addicon from './images/addicon.JPG';
+import Footer from './Footer';
 
 // Picker
 import DateFnsUtils from '@date-io/date-fns';
@@ -35,22 +36,21 @@ class ModifyEvent extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            event:{
-                event_name:'',
-                club_id:'',
-                event_type:'club',
-                event_venue:'',
-                event_desc:'',
-                event_poster:'',
-                event_reg_link:'',
-                event_paid:"false",
-                event_seats:0,
-                start_date:'',
-                end_date:'',
-                event_time:'',
-                event_reg_deadline:'',
-                is_deleted:false,
-            },
+            event_name:'',
+            club_id:'',
+            event_type:'club',
+            event_venue:'',
+            event_desc:'',
+            event_poster:'',
+            event_reg_link:'',
+            event_paid:"false",
+            event_seats:0,
+            start_date:'',
+            end_date:'',
+            event_time:'',
+            event_reg_deadline:'',
+            is_deleted:false,
+            isModified:false,
             err:false,
             btnColor:"primary",
             error:{name:null,desc:null,venue:null},
@@ -69,6 +69,7 @@ class ModifyEvent extends React.Component {
                     event_reg_deadline:null,
                     added_by:this.props.cur_user,
                     is_deleted:false,
+                    isModified:true,
                 }
             
         }
@@ -112,13 +113,13 @@ class ModifyEvent extends React.Component {
     }
 
     checkErr(){
-        if(this.state.event.event_name===''||
-        this.state.event.event_venue===''||
-        this.state.event.event_poster===''||
-        this.state.event.event_seats===0||
-        this.state.event.start_date===''||
-        this.state.event.event_time===''||
-        this.state.event.event_reg_deadline==='')
+        if(this.state.event_name===''||
+        this.state.event_venue===''||
+        this.state.event_poster===''||
+        this.state.event_seats===0||
+        this.state.start_date===''||
+        this.state.event_time===''||
+        this.state.event_reg_deadline==='')
         {
             
             return true;
@@ -153,16 +154,39 @@ class ModifyEvent extends React.Component {
 
 
     SubmitEvent(){
-        console.log(this.checkErr())
-
+        console.log("sa")
         if(!this.checkErr()){
+            /*
+            let copy=this.state.event;
+            copy.isModified=true;
+            copy.modification_date=
+            */
+           let newDate = new Date()
+            
+            console.log(newDate.getDate())
             this.setState({
-                req:this.state.event
+                req:{name:this.state.name,
+                    desc:this.state.desc,
+                    club:this.state.club,
+                    type:this.state.type,
+                    venue:this.state.venue,
+                    poster:this.state.poster,
+                    link:this.state.link,
+                    paid:this.state.paid,
+                    seats:this.state.seats,
+                    start_date:this.state.start_date,
+                    end_date:this.state.end_date,
+                    time:this.state.time,
+                    deadline:this.state.deadline,
+                    added_by:this.props.cur_user,
+                    isDeleted:false,
+                    isModified:true
+                }
             },()=>this.callApi()
             )
             
-            
             this.setState({btnColor:"primary"})
+
         }else{
             this.setState({btnColor:"secondary"})
         }
@@ -180,10 +204,11 @@ class ModifyEvent extends React.Component {
             .then((res) => res.json())
             //.then((data) =>  console.log(data))
             .catch((err)=>console.log(err))
+        alert('event added!')
     }
     
     isTypeOk(){
-        if(this.state.event.event_type===null){
+        if(this.state.event_type===null){
             let copy=this.state.error
             copy.type="error"
             this.setState({error:copy})
@@ -194,7 +219,7 @@ class ModifyEvent extends React.Component {
         }
     }
     IsNameOk(){
-        if(this.state.event.event_name.length>=100){
+        if(this.state.event_name.length>=100){
             if(this.state.error.name===null){
                 let copy=this.state.error
                 copy.name="100 Characters Max"
@@ -215,7 +240,7 @@ class ModifyEvent extends React.Component {
         }
     }
     IsDescOk(){
-        if(this.state.event.event_desc.length>=200){
+        if(this.state.event_desc.length>=200){
             if(this.state.error.desc===null){
                 let copy=this.state.error
                 copy.desc="200 Characters Max"
@@ -236,7 +261,7 @@ class ModifyEvent extends React.Component {
         }
     }
     IsVenueOk(){
-        if(this.state.event.event_venue.length>=200){
+        if(this.state.event_venue.length>=200){
             if(this.state.error.venue===null){
                 let copy=this.state.error
                 copy.venue="200 Characters Max"
@@ -259,8 +284,8 @@ class ModifyEvent extends React.Component {
     
     render() {
         return (
-        
-        <ContainerPanel>
+            
+            <ContainerPanel>
             <TopBar />
         
                 <div style={{ paddingTop: "5%", margin: 'auto', maxWidth: 900, minHeight: "100vh" }}>
@@ -268,7 +293,9 @@ class ModifyEvent extends React.Component {
 
                     <Paper style={{ padding: 50, minHeight: "89vh" }}>
 
-                    <Grid container alignItems="flex-start" spacing={2} minHeight="800px" style={{padding: "12% 0 7% 0"}}>
+                        <Grid container alignItems="flex-start" spacing={2} minHeight="800px" style={{padding: "12% 0 7% 0"}}>
+
+                    
                             <Grid item xs={6}>
                                     <CardMedia
                                     component="img"
@@ -281,12 +308,13 @@ class ModifyEvent extends React.Component {
                                     />  
                                 
                             </Grid>
-                            <Grid item xs={6} align="center">
-                            <Grid container alignItems="flex-start" spacing={2}>
 
+                            <Grid item xs={6} align="center">
+                                
+                            <Grid container alignItems="flex-start" spacing={2}>
                                 <Grid item xs={8}>
                                     <Typography variant="h4" align="center" component="h1" style={{paddingBottom: 20, paddingTop:20}} gutterBottom>
-                                        Modify {this.props.event.event_name}
+                                        Modify {this.state.event_name}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={8}>
@@ -297,10 +325,10 @@ class ModifyEvent extends React.Component {
                                     }}
                                     required
                                     id="name"
-                                    value={this.state.event_name}
                                     error={this.IsNameOk()}
                                     label="Event Name"
                                     helperText={this.state.error.name}
+                                    value={this.state.event_name}
                                     fullWidth
                                     onChange={event=>this.setState({event_name:event.target.value})}
                                 />
@@ -330,8 +358,9 @@ class ModifyEvent extends React.Component {
                                     helperText={this.state.error.venue}
                                     id="venue"
                                     label="Event Venue"
+                                    helperText={this.state.error.venue}
                                     value={this.state.event_venue}
-                                    onChange={event=>this.setState({venue:event.target.value})}
+                                    onChange={event=>this.setState({event_venue:event.target.value})}
                                 />
                                 </Grid>
                                 <Grid item xs={6} style={{paddingTop: 20,marginLeft:-35}}>
@@ -342,16 +371,13 @@ class ModifyEvent extends React.Component {
                                             error
                                             name="type" 
                                             value={this.state.event_type} 
-                                            onChange={(event)=>{this.setState({event_type:event.target.value});if(event.target.value!='club'){this.setState({club_id:0})}}}>
-                                            <FormControlLabel label="Club" value="club" control={<Radio />} />
-                                            <FormControlLabel label="Talks" value="talk" control={<Radio />} />
-                                            <FormControlLabel label="Workshop" value="workshop" control={<Radio />} />
+                                            onChange={(event)=>{this.setState({event_type:event.target.value})}}>
+                                            <FormControlLabel label="Technical" value="Technical" control={<Radio />} />
+                                            <FormControlLabel label="Non Technical" value="Non Technical" control={<Radio />} />
                                         </RadioGroup></Box>
                                     </FormControl>
                                 </Grid>
-                                {
-                                    (this.state.event.event_type == 'club') ? 
-                                    <Grid item xs={6} align="right">
+                                    <Grid item xs={5} align="right">
                                         <FormControl >
                                         <Box marginTop={2} width={120}>
                                             <InputLabel id="demo-controlled-open-select-label">Select Club</InputLabel>
@@ -362,36 +388,21 @@ class ModifyEvent extends React.Component {
                                                 value={this.state.club_id}
                                                 onChange={event=>{this.setState({club_id:event.target.value})}}
                                             >
-                                                <MenuItem value={1}>Food Club</MenuItem>
-                                                <MenuItem value={2}>Photography Club</MenuItem>
-                                                <MenuItem value={3}>Rangmanch</MenuItem>
-                                                <MenuItem value={4}>Workshops</MenuItem>
+                                                <MenuItem value={1}>Workshops</MenuItem>
+                                                <MenuItem value={2}>Talk</MenuItem>
+                                                <MenuItem value={3}>IEEE AU SB</MenuItem>
+                                                <MenuItem value={4}>IEEE AU WIE</MenuItem>
+                                                <MenuItem value={5}>Social Service Forum</MenuItem>
+                                                <MenuItem value={6}>Fitness Club</MenuItem>
+                                                <MenuItem value={7}>Food Club</MenuItem>
+                                                <MenuItem value={8}>Sports Club</MenuItem>
+                                                <MenuItem value={9}>Photography Club</MenuItem>
+                                                <MenuItem value={10}>Quiz Club</MenuItem>
                                             </Select>
                                         </Box>
                                             </FormControl>
                                     </Grid>
-                                    :
-                                    <Grid item xs={6} align="right">
-                                        <FormControl >
-                                        <Box marginTop={2} width={120}>
-                                            <InputLabel id="demo-controlled-open-select-label">Select Club</InputLabel>
-                                            <Select
-                                                fullWidth
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={this.state.club_id}
-                                                disabled
-                                                onChange={event=>{this.setState({club_id:event.target.value})}}
-                                            >
-                                                <MenuItem value={1}>Food Club</MenuItem>
-                                                <MenuItem value={2}>Photography Club</MenuItem>
-                                                <MenuItem value={3}>Rangmanch</MenuItem>
-                                                <MenuItem value={4}>Workshops</MenuItem>
-                                            </Select>
-                                        </Box>
-                                            </FormControl>
-                                    </Grid>
-                                }
+                                 
                                 <Grid item xs={6} align="left">
                                 <FormLabel component="label">Event Date</FormLabel>
                                     
@@ -431,7 +442,7 @@ class ModifyEvent extends React.Component {
                                             autoOk 
                                             ampm={false}
                                             value={this.state.time2} 
-                                            onChange={time=>this.setState({time2:time,time:time.getHours()+':'+time.getMinutes()})} 
+                                            onChange={time=>this.setState({time2:time,event_time:time.getHours()+':'+time.getMinutes()})} 
 
                                             />
                                     </MuiPickersUtilsProvider>
@@ -447,7 +458,7 @@ class ModifyEvent extends React.Component {
                                                 autoOk
                                                 format="dd-MM-yyyy"
                                                 value={this.state.ddate2} 
-                                                onChange={date => this.setState({ddate2:date,deadline:date.toLocaleDateString('en-GB')})} 
+                                                onChange={date => this.setState({ddate2:date,event_deadline:date.toLocaleDateString('en-GB')})} 
                                             />
                                         </MuiPickersUtilsProvider>
                                     
@@ -459,7 +470,7 @@ class ModifyEvent extends React.Component {
                                             row
                                             name="paid" 
                                             value={this.state.event_paid} 
-                                            onChange={(event)=>{this.setState({paid:event.target.value})}}>
+                                            onChange={(event)=>{console.log(event.target.value);this.setState({event_paid:event.target.value})}}>
                                             <FormControlLabel label="Yes" value="true" control={<Radio />} />
                                             <FormControlLabel label="No" value="false" control={<Radio />} />
                                         </RadioGroup>
@@ -480,9 +491,9 @@ class ModifyEvent extends React.Component {
                                         id="link"
                                         label="Registraion Link"
                                         helperText={this.state.error.link}
-                                        value={this.state.event_reg_link}
+                                        value={this.state.event_link}
                                         fullWidth
-                                        onChange={event=>this.setState({link:event.target.value})}
+                                        onChange={event=>this.setState({event_link:event.target.value})}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -493,7 +504,7 @@ class ModifyEvent extends React.Component {
                                         helperText={this.state.error.poster}
                                         value={this.state.event_poster}
                                         fullWidth
-                                        onChange={event=>this.setState({poster:event.target.value})}
+                                        onChange={event=>this.setState({event_poster:event.target.value})}
                                     />
                                 </Grid>
                                 <Grid item style={{ marginTop: 16 }}>
@@ -506,25 +517,27 @@ class ModifyEvent extends React.Component {
                                     </Button>
                                 </Grid>
                                 <Grid item style={{ marginTop: 16 }}>
-                            <Button
-                                variant="contained"
-                                color={this.state.btnColor}
-                                onClick={()=>this.SubmitEvent()}
-                            >
-                                Submit
-                            </Button>
+                                    <Button
+                                        variant="contained"
+                                        color={this.state.btnColor}
+                                        onClick={()=>this.SubmitEvent()}
+                                    >
+                                        Submit
+                                    </Button>
+                                </Grid>
+                            </Grid>
+
+
+                            </Grid>
                         </Grid>
-                            </Grid>
-                            </Grid>
-                    </Grid>
-                </Paper>
+                    </Paper>
                 </div>
                     
             </ContainerPanel>
-        
-        
-        )
-    } 
+            
+            
+            )
+    }  
 }
 
 export default ModifyEvent;

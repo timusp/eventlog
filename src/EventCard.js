@@ -42,29 +42,29 @@ class EventCard extends React.Component{
             confirm:null,
             eventRed:null,
             temp:false,
+            reg:false,del:<Redirect to={{pathname: "/event",}}/>
         }
     }
     
 
     
-    componentWillReceiveProps(props) {
-
-    }
     
     renderRegBtn(){
-        if(this.state.reg){
-            return(
-                <Button variant="contained" size="small" color="secondary" onClick={()=>this.unregister(this.props.resp.event_id)}>
+
+            if(this.state.reg){
+                return(
+                    <Button variant="contained" size="small" color="secondary" onClick={()=>this.unregister(this.props.resp.event_id)}>
                         Unregister
                 </Button>
             )
-        }else{
-            return(
-                <Button variant="contained" size="small" color="primary" onClick={()=>this.register(this.props.resp.event_id)}>
-                        Register
-                </Button>
-            )
-        }
+            }else{
+                return(
+                    <Button variant="contained" size="small" color="primary" onClick={()=>this.register(this.props.resp.event_id)}>
+                            Register
+                    </Button>
+                )
+            }
+        
     }
     renderButtons(){
         if(this.props.added===4){
@@ -92,27 +92,45 @@ class EventCard extends React.Component{
                 <CardActions>
                     <Button variant="outlined" size="small" color="primary"
                         onClick={()=>{
-                            this.setState({eventRed:<Redirect to={{pathname: "/event",}} />},
-                            this.props.onRed(this.props.resp)
-                            )
+                                this.setState({eventRed:this.state.del},()=>{this.props.onRed(this.props.resp)})
+                            
                         }}
                     >
                         More
                     </Button>
                     {this.renderRegBtn()}
+                    
                 </CardActions>
             )
         }
     }
+    isDeleted(){
+        if(this.props.resp.is_deleted==1){
+            return(
+                <Box margin={1}>
+                <Typography variant="body2" color="textSecondary" component="p">
+                    Event Deleted
+                </Typography>
+                </Box>
+            )
+        }
+        else{
+            return(this.renderButtons())
+        }
+    }
 
-    getCardImage(club){
-        var cardImage=null;
-        if(club===1){cardImage=foodImg}
-        else if(club===2){cardImage=photoImg}
-        else if(club===3){cardImage=artImg}
-        else if(club===4){cardImage=danceImg}
-        else if(club===5){cardImage=envImg}
-        return cardImage
+    getCardImage(){
+        console.log(this.props.resp.club_id)
+        fetch("http://localhost:8000/api/getclublogo?club_id="+this.props.resp.club_id)
+            .then(res=>res.json())
+            .then(res=>{
+                this.setState({logo:res.data[0].club_logo})
+            })
+            .catch(err=>err);
+    }
+    componentDidMount(){
+        this.isRegistered()
+        this.getCardImage()
     }
 
     register(event_id){
@@ -125,9 +143,9 @@ class EventCard extends React.Component{
                 body: JSON.stringify(req)
             })
             .then((res) => res.json())
-            //.then((data)=>console.log(data))
             .catch((err)=>console.log(err))
-    }
+            this.setState({temp:!this.state.temp},()=>this.isRegistered())
+        }
 
     unregister(event_id){
         const req={user_id:this.props.cur_user,event_id:event_id}
@@ -139,16 +157,13 @@ class EventCard extends React.Component{
                 body: JSON.stringify(req)
             })
             .then((res) => res.json())
-            //.then((data)=>console.log(data))
-            .then(this.setState({temp:!this.state.temp}))
             .catch((err)=>console.log(err))
+        this.setState({temp:!this.state.temp},()=>this.isRegistered())
     }
 
-    componentWillMount(){
-    }
 
     isRegistered(){
-        const req={user_id:5,event_id:this.props.resp.event_id}
+        const req={user_id:this.props.cur_user,event_id:this.props.resp.event_id}
         fetch('http://localhost:8000/api/getregs', {
             method: 'POST',
             headers: {
@@ -166,7 +181,6 @@ class EventCard extends React.Component{
         }else{return(null)}}
 
     render(){
-        this.isRegistered()
         return(
             <Container margin={1}>
             
@@ -177,7 +191,7 @@ class EventCard extends React.Component{
                     <CardMedia
                         component="img"
                         height="140"
-                        image={this.getCardImage(this.props.resp.club_id)}
+                        image={this.state.logo}
                         title={this.props.resp.event_name}
                         onClick={()=>{
                             this.setState({eventRed:<Redirect to={{pathname: "/event",}} />},
@@ -199,7 +213,7 @@ class EventCard extends React.Component{
                     </Typography>
                     </CardContent>
                 </CardActionArea>
-                {this.renderButtons()}
+                {this.isDeleted()}
                 
                 </Card>
                 {this.state.eventRed}

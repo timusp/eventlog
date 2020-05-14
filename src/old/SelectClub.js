@@ -15,7 +15,7 @@ class SelectClub extends React.Component{
             clubs:[{
                 club_id:0,
                 club_name:"",
-                isChecked:false
+                is_checked:false
             }],
             red:null
         }
@@ -32,7 +32,7 @@ class SelectClub extends React.Component{
         .then(res=>{
             let clubs=[];
             res.data.map((club,index)=>{
-                clubs.push({club_id:club.club_id,club_name:club.club_name,isChecked:false})
+                clubs.push({club_id:club.club_id,club_name:club.club_name,is_checked:false})
             })
             this.setState({clubs});
         })
@@ -42,7 +42,7 @@ class SelectClub extends React.Component{
     submitClub(){
         let req=[];
         this.state.clubs.map((club)=>{
-            if(club.isChecked===true){
+            if(club.is_checked===true){
                 req.push({cur_user:this.state.cur_user,club_id:club.club_id})
             }
         })
@@ -67,7 +67,7 @@ class SelectClub extends React.Component{
         let clubs=this.state.clubs;
         clubs.map((club)=>{
             if(club.club_id===id){
-                club.isChecked=!club.isChecked;
+                club.is_checked=!club.is_checked;
             }
         })
         this.setState({clubs});

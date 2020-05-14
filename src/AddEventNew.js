@@ -10,6 +10,7 @@ import TopBar from './TopBar'
 import DropDown from './base/DropDown';
 import ContainerPanel from './base/ContainerPanel';
 import addicon from './images/addicon.JPG';
+import Footer from './Footer';
 
 // Picker
 import DateFnsUtils from '@date-io/date-fns';
@@ -30,92 +31,94 @@ const imageStyle = {
 
 
 
-class Test extends React.Component {    
+class AddEvent extends React.Component {    
 
     constructor(props){
         super(props);
         this.state={
-            name:'',
-            club:'',
-            type:'club',
-            venue:'',
-            desc:'',
-            poster:'',
-            link:'',
-            paid:"false",
-            seats:0,
+            event_name:'',
+            club_id:'',
+            event_type:'club',
+            event_venue:'',
+            event_desc:'',
+            event_poster:'',
+            event_link:'',
+            event_paid:"false",
+            event_seats:0,
             start_date:'',
             end_date:'',
-            time:'',
-            deadline:'',
-            isDeleted:false,
+            event_time:'',
+            event_deadline:'',
+            is_deleted:false,
             err:false,
             btnColor:"primary",
             error:{name:null,desc:null,venue:null},
-            req:{   name:null,
-                    desc:null,
-                    club:null,
-                    type:null,
-                    venue:null,
-                    poster:null,
-                    link:null,
-                    paid:null,
-                    seats:null,
+            req:{   event_name:null,
+                    event_desc:null,
+                    club_id:null,
+                    event_type:null,
+                    event_venue:null,
+                    event_poster:null,
+                    event_link:null,
+                    event_paid:null,
+                    event_seats:null,
                     start_date:null,
                     end_date:null,
-                    time:null,
-                    deadline:null,
+                    event_time:null,
+                    event_deadline:null,
                     added_by:this.props.cur_user,
-                    isDeleted:false,
+                    is_deleted:false,
                 }
             
         }
     }
 
     reset(){
-        this.setState({name:'',
-                        club:'',
-                        type:'club',
-                        venue:'',
-                        desc:'',
-                        poster:'',
-                        link:'',
-                        paid:"false",
-                        seats:0,
+        this.setState({event_name:'',
+                        club_id:'',
+                        event_type:'club',
+                        event_venue:'',
+                        event_desc:'',
+                        event_poster:'',
+                        event_link:'',
+                        event_paid:"false",
+                        event_seats:0,
                         start_date:'',
                         end_date:'',
-                        time:'',
-                        deadline:'',
+                        event_time:'',
+                        event_deadline:'',
+                        is_deleted:false,
                         err:false,
                         btnColor:"primary",
                         error:{name:null,desc:null,venue:null},
-                        req:{   name:null,
-                                desc:null,
-                                club:null,
-                                type:null,
-                                venue:null,
-                                poster:null,
-                                link:null,
-                                paid:null,
-                                seats:null,
+                        req:{   event_name:null,
+                                event_desc:null,
+                                club_id:null,
+                                event_type:null,
+                                event_venue:null,
+                                event_poster:null,
+                                event_link:null,
+                                event_paid:null,
+                                event_seats:null,
                                 start_date:null,
                                 end_date:null,
-                                time:null,
-                                deadline:null,
+                                event_time:null,
+                                event_deadline:null,
                                 added_by:this.props.cur_user,
+                                is_deleted:false,
                             }
         
         })
     }
 
     checkErr(){
-        if(this.state.name===''||
-        this.state.venue===''||
-        this.state.poster===''||
-        this.state.seats===0||
+        if(this.state.event_name===''||
+        this.state.event_venue===''||
+        this.state.event_poster===''||
+        this.state.event_seats===0||
         this.state.start_date===''||
-        this.state.time===''||
-        this.state.deadline==='')
+        this.state.event_time===''||
+        this.state.event_deadline==='')
         {
             
             return true;
@@ -136,21 +139,23 @@ class Test extends React.Component {
         if(!this.checkErr()){
             console.log("ran")
             this.setState({
-                req:{name:this.state.name,
-                    desc:this.state.desc,
-                    club:this.state.club,
-                    type:this.state.type,
-                    venue:this.state.venue,
-                    poster:this.state.poster,
-                    link:this.state.link,
-                    paid:this.state.paid,
-                    seats:this.state.seats,
+                req:{event_name:this.state.event_name,
+                    event_desc:this.state.event_desc,
+                    club_id:this.state.club_id,
+                    event_type:this.state.event_type,
+                    event_venue:this.state.event_venue,
+                    event_poster:this.state.event_poster,
+                    event_link:this.state.event_link,
+                    event_paid:this.state.event_paid,
+                    event_seats:this.state.event_seats,
                     start_date:this.state.start_date,
                     end_date:this.state.end_date,
-                    time:this.state.time,
-                    deadline:this.state.deadline,
+                    event_time:this.state.event_time,
+                    event_deadline:this.state.event_deadline,
                     added_by:this.props.cur_user,
-                    isDeleted:false,
+                    is_deleted:false,
+                    is_modified:false,
+                    modification_date:null,
                 }
             },()=>this.callApi()
             )
@@ -174,10 +179,11 @@ class Test extends React.Component {
             .then((res) => res.json())
             //.then((data) =>  console.log(data))
             .catch((err)=>console.log(err))
+        alert('event added!')
     }
     
     isTypeOk(){
-        if(this.state.type===null){
+        if(this.state.event_type===null){
             let copy=this.state.error
             copy.type="error"
             this.setState({error:copy})
@@ -188,7 +194,7 @@ class Test extends React.Component {
         }
     }
     IsNameOk(){
-        if(this.state.name.length>=100){
+        if(this.state.event_name.length>=100){
             if(this.state.error.name===null){
                 let copy=this.state.error
                 copy.name="100 Characters Max"
@@ -209,7 +215,7 @@ class Test extends React.Component {
         }
     }
     IsDescOk(){
-        if(this.state.desc.length>=200){
+        if(this.state.event_desc.length>=200){
             if(this.state.error.desc===null){
                 let copy=this.state.error
                 copy.desc="200 Characters Max"
@@ -230,7 +236,7 @@ class Test extends React.Component {
         }
     }
     IsVenueOk(){
-        if(this.state.venue.length>=200){
+        if(this.state.event_venue.length>=200){
             if(this.state.error.venue===null){
                 let copy=this.state.error
                 copy.venue="200 Characters Max"
@@ -297,9 +303,9 @@ class Test extends React.Component {
                                     error={this.IsNameOk()}
                                     label="Event Name"
                                     helperText={this.state.error.name}
-                                    value={this.state.name}
+                                    value={this.state.event_name}
                                     fullWidth
-                                    onChange={event=>this.setState({name:event.target.value})}
+                                    onChange={event=>this.setState({event_name:event.target.value})}
                                 />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -313,8 +319,8 @@ class Test extends React.Component {
                                     id="desc"
                                     label="Event Description"
                                     helperText={this.state.error.desc}
-                                    value={this.state.desc}
-                                    onChange={event=>this.setState({desc:event.target.value})}
+                                    value={this.state.event_desc}
+                                    onChange={event=>this.setState({event_desc:event.target.value})}
                                 />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -328,8 +334,8 @@ class Test extends React.Component {
                                     id="venue"
                                     label="Event Venue"
                                     helperText={this.state.error.venue}
-                                    value={this.state.venue}
-                                    onChange={event=>this.setState({venue:event.target.value})}
+                                    value={this.state.event_venue}
+                                    onChange={event=>this.setState({event_venue:event.target.value})}
                                 />
                                 </Grid>
                                 <Grid item xs={6} style={{paddingTop: 20,marginLeft:-35}}>
@@ -339,16 +345,13 @@ class Test extends React.Component {
                                             required
                                             error
                                             name="type" 
-                                            value={this.state.type} 
-                                            onChange={(event)=>{this.setState({type:event.target.value});if(event.target.value!='club'){this.setState({club:0})}}}>
-                                            <FormControlLabel label="Club" value="club" control={<Radio />} />
-                                            <FormControlLabel label="Talks" value="talk" control={<Radio />} />
-                                            <FormControlLabel label="Workshop" value="workshop" control={<Radio />} />
+                                            value={this.state.event_type} 
+                                            onChange={(event)=>{this.setState({event_type:event.target.value})}}>
+                                            <FormControlLabel label="Technical" value="Technical" control={<Radio />} />
+                                            <FormControlLabel label="Non Technical" value="Non Technical" control={<Radio />} />
                                         </RadioGroup></Box>
                                     </FormControl>
                                 </Grid>
-                                {
-                                    (this.state.type == 'club') ? 
                                     <Grid item xs={5} align="right">
                                         <FormControl >
                                         <Box marginTop={2} width={120}>
@@ -357,39 +360,24 @@ class Test extends React.Component {
                                                 fullWidth
                                                 labelId="demo-simple-select-label"
                                                 id="demo-simple-select"
-                                                value={this.state.club}
-                                                onChange={event=>{this.setState({club:event.target.value})}}
+                                                value={this.state.club_id}
+                                                onChange={event=>{this.setState({club_id:event.target.value})}}
                                             >
-                                                <MenuItem value={1}>Food Club</MenuItem>
-                                                <MenuItem value={2}>Photography Club</MenuItem>
-                                                <MenuItem value={3}>Rangmanch</MenuItem>
-                                                <MenuItem value={4}>Workshops</MenuItem>
+                                                <MenuItem value={1}>Workshops</MenuItem>
+                                                <MenuItem value={2}>Talk</MenuItem>
+                                                <MenuItem value={3}>IEEE AU SB</MenuItem>
+                                                <MenuItem value={4}>IEEE AU WIE</MenuItem>
+                                                <MenuItem value={5}>Social Service Forum</MenuItem>
+                                                <MenuItem value={6}>Fitness Club</MenuItem>
+                                                <MenuItem value={7}>Food Club</MenuItem>
+                                                <MenuItem value={8}>Sports Club</MenuItem>
+                                                <MenuItem value={9}>Photography Club</MenuItem>
+                                                <MenuItem value={10}>Quiz Club</MenuItem>
                                             </Select>
                                         </Box>
                                             </FormControl>
                                     </Grid>
-                                    :
-                                    <Grid item xs={5} align="right">
-                                        <FormControl >
-                                        <Box marginTop={2} width={120}>
-                                            <InputLabel id="demo-controlled-open-select-label">Select Club</InputLabel>
-                                            <Select
-                                                fullWidth
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={this.state.club}
-                                                disabled
-                                                onChange={event=>{this.setState({club:event.target.value})}}
-                                            >
-                                                <MenuItem value={1}>Food Club</MenuItem>
-                                                <MenuItem value={2}>Photography Club</MenuItem>
-                                                <MenuItem value={3}>Rangmanch</MenuItem>
-                                                <MenuItem value={4}>Workshops</MenuItem>
-                                            </Select>
-                                        </Box>
-                                            </FormControl>
-                                    </Grid>
-                                }
+                                 
                                 <Grid item xs={6} align="left">
                                 <FormLabel component="label">Event Date</FormLabel>
                                     
@@ -429,7 +417,7 @@ class Test extends React.Component {
                                             autoOk 
                                             ampm={false}
                                             value={this.state.time2} 
-                                            onChange={time=>this.setState({time2:time,time:time.getHours()+':'+time.getMinutes()})} 
+                                            onChange={time=>this.setState({time2:time,event_time:time.getHours()+':'+time.getMinutes()})} 
 
                                             />
                                     </MuiPickersUtilsProvider>
@@ -445,7 +433,7 @@ class Test extends React.Component {
                                                 autoOk
                                                 format="dd-MM-yyyy"
                                                 value={this.state.ddate2} 
-                                                onChange={date => this.setState({ddate2:date,deadline:date.toLocaleDateString('en-GB')})} 
+                                                onChange={date => this.setState({ddate2:date,event_deadline:date.toLocaleDateString('en-GB')})} 
                                             />
                                         </MuiPickersUtilsProvider>
                                     
@@ -456,8 +444,8 @@ class Test extends React.Component {
                                         <RadioGroup 
                                             row
                                             name="paid" 
-                                            value={this.state.paid} 
-                                            onChange={(event)=>{console.log(event.target.value);this.setState({paid:event.target.value})}}>
+                                            value={this.state.event_paid} 
+                                            onChange={(event)=>{console.log(event.target.value);this.setState({event_paid:event.target.value})}}>
                                             <FormControlLabel label="Yes" value="true" control={<Radio />} />
                                             <FormControlLabel label="No" value="false" control={<Radio />} />
                                         </RadioGroup>
@@ -469,8 +457,8 @@ class Test extends React.Component {
                                         id="seats"
                                         type="number"
                                         label="Seats Available"
-                                        value={this.state.seats}
-                                        onChange={event=>this.setState({seats:event.target.value.replace(/[^0-9]/g, '')})}
+                                        value={this.state.event_seats}
+                                        onChange={event=>this.setState({event_seats:event.target.value.replace(/[^0-9]/g, '')})}
                                     /></Box>
                                 </Grid>
                                 <Grid item xs={12}>
@@ -478,9 +466,9 @@ class Test extends React.Component {
                                         id="link"
                                         label="Registraion Link"
                                         helperText={this.state.error.link}
-                                        value={this.state.link}
+                                        value={this.state.event_link}
                                         fullWidth
-                                        onChange={event=>this.setState({link:event.target.value})}
+                                        onChange={event=>this.setState({event_link:event.target.value})}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -489,9 +477,9 @@ class Test extends React.Component {
                                         id="posterlink"
                                         label="Poster Link"
                                         helperText={this.state.error.poster}
-                                        value={this.state.poster}
+                                        value={this.state.event_poster}
                                         fullWidth
-                                        onChange={event=>this.setState({poster:event.target.value})}
+                                        onChange={event=>this.setState({event_poster:event.target.value})}
                                     />
                                 </Grid>
                                 <Grid item style={{ marginTop: 16 }}>
@@ -527,4 +515,4 @@ class Test extends React.Component {
     } 
 }
 
-export default Test;
+export default AddEvent;
