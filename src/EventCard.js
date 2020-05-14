@@ -169,7 +169,7 @@ class EventCard extends React.Component{
         this.isRegistered()
         return(
             <Container margin={1}>
-              
+            
             
                 <Card>
                 <CardActionArea>
@@ -179,6 +179,11 @@ class EventCard extends React.Component{
                         height="140"
                         image={this.getCardImage(this.props.resp.club_id)}
                         title={this.props.resp.event_name}
+                        onClick={()=>{
+                            this.setState({eventRed:<Redirect to={{pathname: "/event",}} />},
+                            this.props.onRed(this.props.resp)
+                            )
+                        }}
                     />
                     <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
@@ -198,7 +203,7 @@ class EventCard extends React.Component{
                 
                 </Card>
                 {this.state.eventRed}
-                
+            
             </Container>
         )
 

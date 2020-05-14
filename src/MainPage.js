@@ -45,6 +45,7 @@ class MainPage extends React.Component{
                 paid:false,
                 event_reg_deadline:null,
                 modified:null,
+                modification_date:null,
             }],
             red:null,
             overlay:"hidden",
@@ -233,15 +234,41 @@ class MainPage extends React.Component{
     }
 
     deleteEvent(event_id){
-        console.log(event_id)
-        fetch("http://localhost:8000/api/eventdelete/?"+event_id)
+        fetch("http://localhost:8000/api/eventdelete/?event_id="+event_id)
             .then(res=>res.json())
             .then(res=>{
-                //console.log(res.data);
+                console.log(res.data);
             })
             .catch(err=>err);
     }
 
+    renderCard(){
+        const myData = [].concat(this.state.events).sort((a, b) => a.modification_date > b.modification_date ? 1 : -1)
+        //console.log(myData)
+        return(
+
+            myData.map((item, index) => (
+                <Box key={index} marginBottom={2}>
+                <GridListTile cols={1} key={index}>
+                    <EventCard 
+                        key={index}
+                        resp={item}
+                        added={this.state.tab}
+                        isAuth={this.props.isAuth}
+                        cur_user={this.props.cur_user}
+                        onRed={(redevent)=>{
+                            this.props.onRed(redevent)
+                        }}
+                        onConfirm={(val)=>{
+                            this.setState({overlay:val,delete_id:item.event_id})
+                        }}
+                    />
+                    
+                </GridListTile>
+            </Box>
+        ))
+        )
+    }
     
     render(){
        // console.log(this.state.resp[1]);
@@ -275,26 +302,7 @@ class MainPage extends React.Component{
                         <Box width={900} >
                                     <GridList cols={3} cellHeight="35%">
                                         {
-                                            this.state.events.map((item, index) => (
-                                                <Box key={index} marginBottom={2}>
-                                                    <GridListTile cols={1} key={index}>
-                                                        <EventCard 
-                                                            key={index}
-                                                            resp={item}
-                                                            added={this.state.tab}
-                                                            isAuth={this.props.isAuth}
-                                                            cur_user={this.props.cur_user}
-                                                            onRed={(redevent)=>{
-                                                                this.props.onRed(redevent)
-                                                            }}
-                                                            onConfirm={(val)=>{
-                                                                this.setState({overlay:val,delete_id:item.event_id})
-                                                            }}
-                                                        />
-                                                        
-                                                    </GridListTile>
-                                                </Box>
-                                            ))
+                                            this.renderCard()
                                         }
                                     </GridList>
                         </Box>
