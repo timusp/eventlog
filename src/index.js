@@ -161,14 +161,14 @@ export default BasicExample;
   // ========================================
   
  ReactDOM.render(
-    //<BrowserRouter><BasicExample /></BrowserRouter>,
+    <BrowserRouter><BasicExample /></BrowserRouter>,
     //<GLogin />,
     //<EventCard />,
     //<SelectClub />,
     //<Test />,
     //<BrowserRouter><MainPage /></BrowserRouter>,
     //<EventDetails />,
-    <AddEvent />,
+    //<AddEvent />,
     //<TopBar />,
     //<ModifyEvent event_id={1}/>,
     //<NotAuth />,

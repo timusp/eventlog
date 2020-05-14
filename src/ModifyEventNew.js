@@ -20,6 +20,8 @@ import {
 } from '@material-ui/pickers';
 
 
+import login from './images/Modify_Event.png';
+import CardMedia from '@material-ui/core/CardMedia';
 
 const imageStyle = {
     width: "100px",
@@ -257,242 +259,253 @@ class ModifyEvent extends React.Component {
     
     render() {
         return (
-            <ContainerPanel>
-            
-            <div style={{ padding: 16, margin: 'auto', maxWidth: 600 }}>
-            <CssBaseline />
-                    <Paper style={{ padding: 28 }}>
-                    <Grid container alignItems="flex-start" spacing={2}>
-                        <Grid item xs={2}>
-                            <Image
-                                src={addicon}
-                                style={imageStyle}
-                                align="right"
-                            />
-                        </Grid>
-                        <Grid item xs={8}>
-                            <Typography variant="h4" align="center" component="h1" style={{paddingBottom: 20, paddingTop:20}} gutterBottom>
-                                Modify {this.props.event.event_name}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={8}>
+        
+        <ContainerPanel>
+            <TopBar />
+        
+                <div style={{ paddingTop: "5%", margin: 'auto', maxWidth: 900, minHeight: "100vh" }}>
+                    <CssBaseline />
 
-                        <TextField
-                            inputProps={{
-                                maxLength: 100,
-                            }}
-                            required
-                            id="name"
-                            value={this.state.event_name}
-                            error={this.IsNameOk()}
-                            label="Event Name"
-                            helperText={this.state.error.name}
-                            fullWidth
-                            onChange={event=>this.setState({event_name:event.target.value})}
-                        />
-                        </Grid>
-                        <Grid item xs={12}>
-                        <TextField
-                            inputProps={{
-                                maxLength: 200,
-                            }}
-                            fullWidth multiline rows={2} rowsMax={4}
-                            error={this.IsDescOk()}
-                            helperText={this.state.error.desc}
-                            id="desc"
-                            label="Event Description"
-                            helperText={this.state.error.desc}
-                            value={this.state.event_desc}
-                            onChange={event=>this.setState({event_desc:event.target.value})}
-                        />
-                        </Grid>
-                        <Grid item xs={12}>
-                        <TextField
-                            inputProps={{
-                                maxLength: 200,
-                            }}
-                            fullWidth
-                            error={this.IsVenueOk()}
-                            helperText={this.state.error.venue}
-                            id="venue"
-                            label="Event Venue"
-                            value={this.state.event_venue}
-                            onChange={event=>this.setState({venue:event.target.value})}
-                        />
-                        </Grid>
-                        <Grid item xs={7} style={{paddingTop: 20}}>
-                            <FormControl component="fieldset">
-                                <FormLabel component="label">Event Type</FormLabel>
-                                <RadioGroup 
-                                    row 
+                    <Paper style={{ padding: 50, minHeight: "89vh" }}>
+
+                    <Grid container alignItems="flex-start" spacing={2} minHeight="800px" style={{padding: "12% 0 7% 0"}}>
+                            <Grid item xs={6}>
+                                    <CardMedia
+                                    component="img"
+                                    alt="Contemplative Reptile"
+                                    maxHeight="200"
+                                    padding="20"
+                                    style={{width: 400, height: "400%"}}
+                                    image={login}
+                                    title="Contemplative Reptile"
+                                    />  
+                                
+                            </Grid>
+                            <Grid item xs={6} align="center">
+                            <Grid container alignItems="flex-start" spacing={2}>
+
+                                <Grid item xs={8}>
+                                    <Typography variant="h4" align="center" component="h1" style={{paddingBottom: 20, paddingTop:20}} gutterBottom>
+                                        Modify {this.props.event.event_name}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={8}>
+
+                                <TextField
+                                    inputProps={{
+                                        maxLength: 100,
+                                    }}
                                     required
-                                    error
-                                    name="type" 
-                                    value={this.state.event_type} 
-                                    onChange={(event)=>{this.setState({event_type:event.target.value});if(event.target.value!='club'){this.setState({club_id:0})}}}>
-                                    <FormControlLabel label="Club" value="club" control={<Radio />} />
-                                    <FormControlLabel label="Talks" value="talk" control={<Radio />} />
-                                    <FormControlLabel label="Workshop" value="workshop" control={<Radio />} />
-                                </RadioGroup>
-                            </FormControl>
-                        </Grid>
-                        {
-                            (this.state.event.event_type == 'club') ? 
-                            <Grid item xs={5} align="right">
-                                <FormControl >
-                                <Box marginTop={2} width={120}>
-                                    <InputLabel id="demo-controlled-open-select-label">Select Club</InputLabel>
-                                    <Select
-                                        fullWidth
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={this.state.club_id}
-                                        onChange={event=>{this.setState({club_id:event.target.value})}}
-                                    >
-                                        <MenuItem value={1}>Food Club</MenuItem>
-                                        <MenuItem value={2}>Photography Club</MenuItem>
-                                        <MenuItem value={3}>Rangmanch</MenuItem>
-                                        <MenuItem value={4}>Workshops</MenuItem>
-                                    </Select>
-                                </Box>
+                                    id="name"
+                                    value={this.state.event_name}
+                                    error={this.IsNameOk()}
+                                    label="Event Name"
+                                    helperText={this.state.error.name}
+                                    fullWidth
+                                    onChange={event=>this.setState({event_name:event.target.value})}
+                                />
+                                </Grid>
+                                <Grid item xs={12}>
+                                <TextField
+                                    inputProps={{
+                                        maxLength: 200,
+                                    }}
+                                    fullWidth multiline rows={2} rowsMax={4}
+                                    error={this.IsDescOk()}
+                                    helperText={this.state.error.desc}
+                                    id="desc"
+                                    label="Event Description"
+                                    helperText={this.state.error.desc}
+                                    value={this.state.event_desc}
+                                    onChange={event=>this.setState({event_desc:event.target.value})}
+                                />
+                                </Grid>
+                                <Grid item xs={12}>
+                                <TextField
+                                    inputProps={{
+                                        maxLength: 200,
+                                    }}
+                                    fullWidth
+                                    error={this.IsVenueOk()}
+                                    helperText={this.state.error.venue}
+                                    id="venue"
+                                    label="Event Venue"
+                                    value={this.state.event_venue}
+                                    onChange={event=>this.setState({venue:event.target.value})}
+                                />
+                                </Grid>
+                                <Grid item xs={6} style={{paddingTop: 20,marginLeft:-35}}>
+                                    <FormControl component="fieldset">
+                                        <FormLabel component="label">Event Type</FormLabel>
+                                        <Box textAlign="left"><RadioGroup 
+                                            required
+                                            error
+                                            name="type" 
+                                            value={this.state.event_type} 
+                                            onChange={(event)=>{this.setState({event_type:event.target.value});if(event.target.value!='club'){this.setState({club_id:0})}}}>
+                                            <FormControlLabel label="Club" value="club" control={<Radio />} />
+                                            <FormControlLabel label="Talks" value="talk" control={<Radio />} />
+                                            <FormControlLabel label="Workshop" value="workshop" control={<Radio />} />
+                                        </RadioGroup></Box>
                                     </FormControl>
-                            </Grid>
-                            :
-                            <Grid item xs={5} align="right">
-                                <FormControl >
-                                <Box marginTop={2} width={120}>
-                                    <InputLabel id="demo-controlled-open-select-label">Select Club</InputLabel>
-                                    <Select
-                                        fullWidth
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={this.state.club_id}
-                                        disabled
-                                        onChange={event=>{this.setState({club_id:event.target.value})}}
-                                    >
-                                        <MenuItem value={1}>Food Club</MenuItem>
-                                        <MenuItem value={2}>Photography Club</MenuItem>
-                                        <MenuItem value={3}>Rangmanch</MenuItem>
-                                        <MenuItem value={4}>Workshops</MenuItem>
-                                    </Select>
-                                </Box>
-                                    </FormControl>
-                            </Grid>
-                        }
-                        <Grid item xs={6} align="left">
-                        <FormLabel component="label">Event Date</FormLabel>
-                            
-                                
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <DatePicker 
-                                        disablePast
-                                        autoOk
-                                        format="dd-MM-yyyy"
-                                        value={this.state.start_date2} 
-                                        onChange={date => this.setState({start_date2:date,start_date:date.toLocaleDateString('en-GB')})} 
-                                    />
-                                </MuiPickersUtilsProvider>
-                            
-                        </Grid>
-                        <Grid item xs={6} align="left">
-                        <FormLabel component="label">Event End Date</FormLabel>
-                            
-                                
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <DatePicker 
-                                        disablePast
-                                        autoOk
-                                        format="dd-MM-yyyy"
-                                        value={this.state.end_date2} 
-                                        onChange={date => this.setState({end_date2:date,end_date:date.toLocaleDateString('en-GB')})} 
-                                    />
-                                </MuiPickersUtilsProvider>
-                            
-                        </Grid>
-                        <Grid item xs={6}>
-                        <FormLabel component="label">Event Time</FormLabel>
-                            
-                            
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <TimePicker 
-                                    autoOk 
-                                    ampm={false}
-                                    value={this.state.time2} 
-                                    onChange={time=>this.setState({time2:time,time:time.getHours()+':'+time.getMinutes()})} 
+                                </Grid>
+                                {
+                                    (this.state.event.event_type == 'club') ? 
+                                    <Grid item xs={6} align="right">
+                                        <FormControl >
+                                        <Box marginTop={2} width={120}>
+                                            <InputLabel id="demo-controlled-open-select-label">Select Club</InputLabel>
+                                            <Select
+                                                fullWidth
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={this.state.club_id}
+                                                onChange={event=>{this.setState({club_id:event.target.value})}}
+                                            >
+                                                <MenuItem value={1}>Food Club</MenuItem>
+                                                <MenuItem value={2}>Photography Club</MenuItem>
+                                                <MenuItem value={3}>Rangmanch</MenuItem>
+                                                <MenuItem value={4}>Workshops</MenuItem>
+                                            </Select>
+                                        </Box>
+                                            </FormControl>
+                                    </Grid>
+                                    :
+                                    <Grid item xs={6} align="right">
+                                        <FormControl >
+                                        <Box marginTop={2} width={120}>
+                                            <InputLabel id="demo-controlled-open-select-label">Select Club</InputLabel>
+                                            <Select
+                                                fullWidth
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={this.state.club_id}
+                                                disabled
+                                                onChange={event=>{this.setState({club_id:event.target.value})}}
+                                            >
+                                                <MenuItem value={1}>Food Club</MenuItem>
+                                                <MenuItem value={2}>Photography Club</MenuItem>
+                                                <MenuItem value={3}>Rangmanch</MenuItem>
+                                                <MenuItem value={4}>Workshops</MenuItem>
+                                            </Select>
+                                        </Box>
+                                            </FormControl>
+                                    </Grid>
+                                }
+                                <Grid item xs={6} align="left">
+                                <FormLabel component="label">Event Date</FormLabel>
+                                    
+                                        
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <DatePicker 
+                                                disablePast
+                                                autoOk
+                                                format="dd-MM-yyyy"
+                                                value={this.state.start_date2} 
+                                                onChange={date => this.setState({start_date2:date,start_date:date.toLocaleDateString('en-GB')})} 
+                                            />
+                                        </MuiPickersUtilsProvider>
+                                    
+                                </Grid>
+                                <Grid item xs={6} align="left">
+                                <FormLabel component="label">Event End Date</FormLabel>
+                                    
+                                        
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <DatePicker 
+                                                disablePast
+                                                autoOk
+                                                format="dd-MM-yyyy"
+                                                value={this.state.end_date2} 
+                                                onChange={date => this.setState({end_date2:date,end_date:date.toLocaleDateString('en-GB')})} 
+                                            />
+                                        </MuiPickersUtilsProvider>
+                                    
+                                </Grid>
+                                <Grid item xs={6}>
+                                <FormLabel component="label">Event Time</FormLabel>
+                                    
+                                    
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <TimePicker 
+                                            autoOk 
+                                            ampm={false}
+                                            value={this.state.time2} 
+                                            onChange={time=>this.setState({time2:time,time:time.getHours()+':'+time.getMinutes()})} 
 
-                                    />
-                            </MuiPickersUtilsProvider>
-                        
-                        </Grid>
-                        <Grid item xs={6}>
-                            <FormLabel component="label">Registration Deadline</FormLabel>
-                            
+                                            />
+                                    </MuiPickersUtilsProvider>
                                 
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <DatePicker 
-                                        disablePast
-                                        autoOk
-                                        format="dd-MM-yyyy"
-                                        value={this.state.ddate2} 
-                                        onChange={date => this.setState({ddate2:date,deadline:date.toLocaleDateString('en-GB')})} 
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FormLabel component="label">Registration Deadline</FormLabel>
+                                    
+                                        
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <DatePicker 
+                                                disablePast
+                                                autoOk
+                                                format="dd-MM-yyyy"
+                                                value={this.state.ddate2} 
+                                                onChange={date => this.setState({ddate2:date,deadline:date.toLocaleDateString('en-GB')})} 
+                                            />
+                                        </MuiPickersUtilsProvider>
+                                    
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Box style={{paddingTop:20}}><FormControl component="fieldset">
+                                        <FormLabel component="label">Paid Event?</FormLabel>
+                                        <RadioGroup 
+                                            row
+                                            name="paid" 
+                                            value={this.state.event_paid} 
+                                            onChange={(event)=>{this.setState({paid:event.target.value})}}>
+                                            <FormControlLabel label="Yes" value="true" control={<Radio />} />
+                                            <FormControlLabel label="No" value="false" control={<Radio />} />
+                                        </RadioGroup>
+                                    </FormControl></Box>
+                                
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Box style={{paddingTop:20}}><TextField
+                                        id="seats"
+                                        type="number"
+                                        label="Seats Available"
+                                        value={this.state.event_seats}
+                                        onChange={event=>this.setState({event_seats:event.target.value.replace(/[^0-9]/g, '')})}
+                                    /></Box>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="link"
+                                        label="Registraion Link"
+                                        helperText={this.state.error.link}
+                                        value={this.state.event_reg_link}
+                                        fullWidth
+                                        onChange={event=>this.setState({link:event.target.value})}
                                     />
-                                </MuiPickersUtilsProvider>
-                            
-                        </Grid>
-                        <Grid item xs={4}>
-                            <FormControl component="fieldset">
-                                <FormLabel component="label">Paid Event?</FormLabel>
-                                <RadioGroup 
-                                    row
-                                    name="paid" 
-                                    value={this.state.event_paid} 
-                                    onChange={(event)=>{this.setState({paid:event.target.value})}}>
-                                    <FormControlLabel label="Yes" value="true" control={<Radio />} />
-                                    <FormControlLabel label="No" value="false" control={<Radio />} />
-                                </RadioGroup>
-                            </FormControl>
-                        
-                        </Grid>
-                        <Grid item xs={3}>
-                            <TextField
-                                id="seats"
-                                type="number"
-                                label="Seats Available"
-                                value={this.state.event_seats}
-                                onChange={event=>this.setState({event_seats:event.target.value.replace(/[^0-9]/g, '')})}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="link"
-                                label="Registraion Link"
-                                helperText={this.state.error.link}
-                                value={this.state.event_reg_link}
-                                fullWidth
-                                onChange={event=>this.setState({link:event.target.value})}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                id="posterlink"
-                                label="Poster Link"
-                                helperText={this.state.error.poster}
-                                value={this.state.event_poster}
-                                fullWidth
-                                onChange={event=>this.setState({poster:event.target.value})}
-                            />
-                        </Grid>
-                        <Grid item style={{ marginTop: 16 }}>
-                            <Button
-                                type="button"
-                                variant="contained"
-                                onClick={()=>{this.reset()}}
-                            >
-                                Reset
-                            </Button>
-                        </Grid>
-                        <Grid item style={{ marginTop: 16 }}>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        id="posterlink"
+                                        label="Poster Link"
+                                        helperText={this.state.error.poster}
+                                        value={this.state.event_poster}
+                                        fullWidth
+                                        onChange={event=>this.setState({poster:event.target.value})}
+                                    />
+                                </Grid>
+                                <Grid item style={{ marginTop: 16 }}>
+                                    <Button
+                                        type="button"
+                                        variant="contained"
+                                        onClick={()=>{this.reset()}}
+                                    >
+                                        Reset
+                                    </Button>
+                                </Grid>
+                                <Grid item style={{ marginTop: 16 }}>
                             <Button
                                 variant="contained"
                                 color={this.state.btnColor}
@@ -501,12 +514,15 @@ class ModifyEvent extends React.Component {
                                 Submit
                             </Button>
                         </Grid>
+                            </Grid>
+                            </Grid>
                     </Grid>
-                    </Paper>
-                
-            
-            </div>
+                </Paper>
+                </div>
+                    
             </ContainerPanel>
+        
+        
         )
     } 
 }
