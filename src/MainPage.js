@@ -35,14 +35,14 @@ class MainPage extends React.Component{
                 event_id:null,
                 club_id:null,
                 event_name:null,
-                event_date:null,
-                event_time:null,
+                start_time:null,
+                end_time:null,
                 event_venue:null,
                 event_type:null,
                 event_desc:null,
                 event_poster:null,
                 event_reg_link:null,
-                event_reg_fee:null,
+                paid:false,
                 event_reg_deadline:null,
                 modified:null,
             }],
@@ -242,25 +242,9 @@ class MainPage extends React.Component{
             .catch(err=>err);
     }
 
-    isRegistered(){
-        const req={user_id:this.props.cur_user}
-        var regs=null;
-        fetch('http://localhost:8000/api/getregistered', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(req)
-        })
-        .then((res) => res.json())
-        .then((data)=>regs=data.data)
-        .catch((err)=>console.log(err))
-    }
-
-
+    
     render(){
        // console.log(this.state.resp[1]);
-       this.isRegistered()
        return(
             <div>
                 {this.renderOverlay()
@@ -300,16 +284,21 @@ class MainPage extends React.Component{
                                                             added={this.state.tab}
                                                             isAuth={this.props.isAuth}
                                                             cur_user={this.props.cur_user}
+                                                            onRed={(redevent)=>{
+                                                                this.props.onRed(redevent)
+                                                            }}
                                                             onConfirm={(val)=>{
                                                                 this.setState({overlay:val,delete_id:item.event_id})
                                                             }}
                                                         />
+                                                        
                                                     </GridListTile>
                                                 </Box>
                                             ))
                                         }
                                     </GridList>
                         </Box>
+                        
                  </Box>       
                  {this.state.red}
                  

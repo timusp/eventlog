@@ -21,6 +21,7 @@ import Test from './test';
 
 
 import AddEvent from './AddEventNew';
+import ModifyEvent from './ModifyEventNew';
 
 import EventCard from './EventCard';
 import EventPage from './EventPage';
@@ -31,7 +32,6 @@ import ContainerPanel from "./base/ContainerPanel";
 import {Button,Grid} from '@material-ui/core/';
 
 
-import ModifyEvent from './ModifyEvent';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ProtectedRoute } from './protected.route';
@@ -48,6 +48,7 @@ class BasicExample extends React.Component {
       isAuth:false,
       isOrg:false,
     }
+    
   }
 
   renderAuth(){
@@ -91,9 +92,6 @@ class BasicExample extends React.Component {
 
   render(){
 
-
-
-
     return (
       <div>
 
@@ -107,6 +105,7 @@ class BasicExample extends React.Component {
           isAuth={this.state.isAuth}
           cur_user={this.state.cur_user}
           isOrg={this.state.isOrg}
+          onRed={(redevent)=>this.setState({redevent})}
         />
         <ProtectedRoute
           exact path='/selectclubs'
@@ -117,6 +116,20 @@ class BasicExample extends React.Component {
         <ProtectedRoute
           exact path='/addevent'
           component={AddEvent}
+          isAuth={this.state.isAuth}
+          cur_user={this.state.cur_user}
+        />
+        <ProtectedRoute
+          exact path='/modifyevent'
+          component={ModifyEvent}
+          event={this.state.redevent}
+          isAuth={this.state.isAuth}
+          cur_user={this.state.cur_user}
+        />
+        <ProtectedRoute
+          exact path='/event'
+          component={EventDetails}
+          event={this.state.redevent}
           isAuth={this.state.isAuth}
           cur_user={this.state.cur_user}
         />
@@ -152,10 +165,10 @@ export default BasicExample;
     //<GLogin />,
     //<EventCard />,
     //<SelectClub />,
-    <Test />,
+    //<Test />,
     //<BrowserRouter><MainPage /></BrowserRouter>,
     //<EventDetails />,
-    //<AddEvent />,
+    <AddEvent />,
     //<TopBar />,
     //<ModifyEvent event_id={1}/>,
     //<NotAuth />,

@@ -6,7 +6,7 @@ import Image from 'material-ui-image';
 import { TextField,InputLabel,Box,Select,Input,Typography, Paper, Link, Grid, Button, CssBaseline, RadioGroup,Radio, FormLabel, MenuItem, FormGroup, FormControl, FormControlLabel,
 } from '@material-ui/core';
 
-
+import TopBar from './TopBar'
 import DropDown from './base/DropDown';
 import ContainerPanel from './base/ContainerPanel';
 import addicon from './images/addicon.JPG';
@@ -46,6 +46,7 @@ class AddEvent extends React.Component {
             end_date:'',
             time:'',
             deadline:'',
+            isDeleted:false,
             err:false,
             btnColor:"primary",
             error:{name:null,desc:null,venue:null},
@@ -62,10 +63,47 @@ class AddEvent extends React.Component {
                     end_date:null,
                     time:null,
                     deadline:null,
-                    added_by:null,
+                    added_by:this.props.cur_user,
+                    isDeleted:false,
                 }
             
         }
+    }
+
+    reset(){
+        this.setState({name:'',
+                        club:'',
+                        type:'club',
+                        venue:'',
+                        desc:'',
+                        poster:'',
+                        link:'',
+                        paid:"false",
+                        seats:0,
+                        start_date:'',
+                        end_date:'',
+                        time:'',
+                        deadline:'',
+                        err:false,
+                        btnColor:"primary",
+                        error:{name:null,desc:null,venue:null},
+                        req:{   name:null,
+                                desc:null,
+                                club:null,
+                                type:null,
+                                venue:null,
+                                poster:null,
+                                link:null,
+                                paid:null,
+                                seats:null,
+                                start_date:null,
+                                end_date:null,
+                                time:null,
+                                deadline:null,
+                                added_by:this.props.cur_user,
+                            }
+        
+        })
     }
 
     checkErr(){
@@ -109,7 +147,8 @@ class AddEvent extends React.Component {
                     end_date:this.state.end_date,
                     time:this.state.time,
                     deadline:this.state.deadline,
-                    added_by:this.props.added_by
+                    added_by:this.props.cur_user,
+                    isDeleted:false,
                 }
             },()=>this.callApi()
             )
@@ -135,7 +174,7 @@ class AddEvent extends React.Component {
             .catch((err)=>console.log(err))
     }
     
-        isTypeOk(){
+    isTypeOk(){
         if(this.state.type===null){
             let copy=this.state.error
             copy.type="error"
@@ -213,6 +252,7 @@ class AddEvent extends React.Component {
     render() {
         return (
             <ContainerPanel>
+            
             <div style={{ padding: 16, margin: 'auto', maxWidth: 600 }}>
             <CssBaseline />
                     <Paper style={{ padding: 28 }}>
@@ -284,7 +324,7 @@ class AddEvent extends React.Component {
                                     error
                                     name="type" 
                                     value={this.state.type} 
-                                    onChange={(event)=>{this.setState({type:event.target.value});if(event.target.value!='club'){this.setState({club:''})}}}>
+                                    onChange={(event)=>{this.setState({type:event.target.value});if(event.target.value!='club'){this.setState({club:0})}}}>
                                     <FormControlLabel label="Club" value="club" control={<Radio />} />
                                     <FormControlLabel label="Talks" value="talk" control={<Radio />} />
                                     <FormControlLabel label="Workshop" value="workshop" control={<Radio />} />
@@ -414,7 +454,7 @@ class AddEvent extends React.Component {
                                 type="number"
                                 label="Seats Available"
                                 value={this.state.seats}
-                                onChange={event=>this.setState({seats:event.target.value})}
+                                onChange={event=>this.setState({seats:event.target.value.replace(/[^0-9]/g, '')})}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -442,7 +482,7 @@ class AddEvent extends React.Component {
                             <Button
                                 type="button"
                                 variant="contained"
-                                //onClick={}
+                                onClick={()=>{this.reset()}}
                             >
                                 Reset
                             </Button>

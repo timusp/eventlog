@@ -33,13 +33,13 @@ class EventDetails extends React.Component {
 
         
     }
+    clubName(val){
+        //if()
 
+    }
     render() {
-
-        
         return(
-            
-            
+                
             <ContainerPanel>
           
                 <div style={{ padding: 16, margin: 'auto', maxWidth: 800 }}>
@@ -51,41 +51,43 @@ class EventDetails extends React.Component {
 
                         <Grid item xs={12}>
                             <Typography variant="h5" align="center" component="h1" style={{paddingBottom: 20, paddingTop:20}} gutterBottom>
-                                Event Type - Event Name
+                                {this.props.event.event_name}
                             </Typography>
                         </Grid>
 
                         <Grid item xs={12} align="center">
-                            <PosterComponent />
+                            <PosterComponent poster={this.props.event.event_poster} deadline={this.props.event.event_reg_deadline} />
                         </Grid>
 
                         <Grid item xs={12} align="center" style={{marginLeft: "5%", marginRight: "5%"}}>
                             <Typography align="center" component="h1" style={{paddingBottom: 20, paddingTop:20,}} gutterBottom>
-                                Event Type - Event Name
-                                img elements must have an alt prop, either with meaningful text, or an empty string for decorative images
-                                img elements must have an alt prop, either with meaningful text, or an empty string for decorative images
-                                img elements must have an alt prop, either with meaningful text, or an empty string for decorative images
+                                {this.props.event.type}
+                            </Typography>
+                            <Typography align="center" component="h1" style={{paddingBottom: 20, paddingTop:20,}} gutterBottom>
+                                {this.clubName()}
+                            </Typography>
+                            <Typography align="center" component="h1" style={{paddingBottom: 20, paddingTop:20,}} gutterBottom>
+                                {this.props.event.event_desc}
                             </Typography>
                         </Grid>
 
                         <Grid item xs={6} align="left" style={{paddingLeft: "7%"}}>
                             <LocationOnIcon />
-                            Insert Venue
+                            {this.props.event.event_venue}
                         </Grid>
 
                         <Grid item xs={6} align="left" style={{paddingRight: "0%"}}>
                             <EventIcon />
-                            Insert start Event Date and end event date
+                            {this.props.event.start_date} {this.props.event.end_date} 
                         </Grid>
 
                         <Grid item xs={6} align="left" style={{paddingLeft: "7%"}}>
-                            <MoneyIcon />
-                            Insert Fee Amount
+                            {this.props.event.seats}
                         </Grid>
 
                         <Grid item xs={6} align="left" style={{paddingRight: "0%"}}>
                             <AccessTimeIcon />
-                            Insert Start time and end time
+                            {this.props.event.event_time}
                         </Grid>
 
                     </Grid>

@@ -6,7 +6,7 @@ import Image from 'material-ui-image';
 import { TextField,InputLabel,Box,Select,Input,Typography, Paper, Link, Grid, Button, CssBaseline, RadioGroup,Radio, FormLabel, MenuItem, FormGroup, FormControl, FormControlLabel,
 } from '@material-ui/core';
 
-
+import TopBar from './TopBar'
 import DropDown from './base/DropDown';
 import ContainerPanel from './base/ContainerPanel';
 import addicon from './images/addicon.JPG';
@@ -28,54 +28,95 @@ const imageStyle = {
 
 
 
-class AddEvent extends React.Component {    
+class ModifyEvent extends React.Component {    
 
     constructor(props){
         super(props);
         this.state={
-            name:'',
-            club:'',
-            type:'club',
-            venue:'',
-            desc:'',
-            poster:'',
-            link:'',
-            paid:"false",
-            seats:0,
-            start_date:'',
-            end_date:'',
-            time:'',
-            deadline:'',
+            event:{
+                event_name:'',
+                club_id:'',
+                event_type:'club',
+                event_venue:'',
+                event_desc:'',
+                event_poster:'',
+                event_reg_link:'',
+                event_paid:"false",
+                event_seats:0,
+                start_date:'',
+                end_date:'',
+                event_time:'',
+                event_reg_deadline:'',
+                is_deleted:false,
+            },
             err:false,
             btnColor:"primary",
             error:{name:null,desc:null,venue:null},
-            req:{   name:null,
-                    desc:null,
-                    club:null,
-                    type:null,
-                    venue:null,
-                    poster:null,
-                    link:null,
-                    paid:null,
-                    seats:null,
+            req:{   event_name:null,
+                    event_desc:null,
+                    club_id:null,
+                    event_type:null,
+                    event_venue:null,
+                    event_poster:null,
+                    event_reg_link:null,
+                    event_paid:null,
+                    event_seats:null,
                     start_date:null,
                     end_date:null,
-                    time:null,
-                    deadline:null,
-                    added_by:null,
+                    event_time:null,
+                    event_reg_deadline:null,
+                    added_by:this.props.cur_user,
+                    is_deleted:false,
                 }
             
         }
     }
 
+    reset(){
+        this.setState({
+                        event_name:'',
+                        club_id:'',
+                        event_type:'club',
+                        event_venue:'',
+                        event_desc:'',
+                        event_poster:'',
+                        event_reg_link:'',
+                        event_paid:"false",
+                        event_seats:0,
+                        start_date:'',
+                        end_date:'',
+                        event_time:'',
+                        event_reg_deadline:'',
+                        err:false,
+                        btnColor:"primary",
+                        error:{name:null,desc:null,venue:null},
+                        req:{   name:null,
+                                desc:null,
+                                club:null,
+                                type:null,
+                                venue:null,
+                                poster:null,
+                                link:null,
+                                paid:null,
+                                seats:null,
+                                start_date:null,
+                                end_date:null,
+                                time:null,
+                                deadline:null,
+                                added_by:this.props.cur_user,
+                            }
+        
+        })
+    }
+
     checkErr(){
-        if(this.state.name===''||
-        this.state.venue===''||
-        this.state.poster===''||
-        this.state.seats===0||
-        this.state.start_date===''||
-        this.state.time===''||
-        this.state.deadline==='')
+        if(this.state.event.event_name===''||
+        this.state.event.event_venue===''||
+        this.state.event.event_poster===''||
+        this.state.event.event_seats===0||
+        this.state.event.start_date===''||
+        this.state.event.event_time===''||
+        this.state.event.event_reg_deadline==='')
         {
             
             return true;
@@ -90,27 +131,31 @@ class AddEvent extends React.Component {
         }
     }
 
+    componentDidMount(){
+        this.setState({
+            event_name:this.props.event.event_name,
+            club_id:this.props.event.club_id,
+            event_type:this.props.event.event_type,
+            event_venue:this.props.event.event_venue,
+            event_desc:this.props.event.event_desc,
+            event_poster:this.props.event.event_poster,
+            event_reg_link:this.props.event.event_reg_link,
+            event_paid:this.props.event.event_paid,
+            event_seats:this.props.event.event_seats,
+            start_date:this.props.event.start_date,
+            end_date:this.props.event.end_date,
+            event_time:this.props.event.event_time,
+            event_reg_deadline:this.props.event.event_reg_deadline,
+        })
+    }
+
+
     SubmitEvent(){
         console.log(this.checkErr())
 
         if(!this.checkErr()){
-            console.log("ran")
             this.setState({
-                req:{name:this.state.name,
-                    desc:this.state.desc,
-                    club:this.state.club,
-                    type:this.state.type,
-                    venue:this.state.venue,
-                    poster:this.state.poster,
-                    link:this.state.link,
-                    paid:this.state.paid,
-                    seats:this.state.seats,
-                    start_date:this.state.start_date,
-                    end_date:this.state.end_date,
-                    time:this.state.time,
-                    deadline:this.state.deadline,
-                    added_by:this.props.added_by
-                }
+                req:this.state.event
             },()=>this.callApi()
             )
             
@@ -135,8 +180,8 @@ class AddEvent extends React.Component {
             .catch((err)=>console.log(err))
     }
     
-        isTypeOk(){
-        if(this.state.type===null){
+    isTypeOk(){
+        if(this.state.event.event_type===null){
             let copy=this.state.error
             copy.type="error"
             this.setState({error:copy})
@@ -147,7 +192,7 @@ class AddEvent extends React.Component {
         }
     }
     IsNameOk(){
-        if(this.state.name.length>=100){
+        if(this.state.event.event_name.length>=100){
             if(this.state.error.name===null){
                 let copy=this.state.error
                 copy.name="100 Characters Max"
@@ -168,7 +213,7 @@ class AddEvent extends React.Component {
         }
     }
     IsDescOk(){
-        if(this.state.desc.length>=200){
+        if(this.state.event.event_desc.length>=200){
             if(this.state.error.desc===null){
                 let copy=this.state.error
                 copy.desc="200 Characters Max"
@@ -189,7 +234,7 @@ class AddEvent extends React.Component {
         }
     }
     IsVenueOk(){
-        if(this.state.venue.length>=200){
+        if(this.state.event.event_venue.length>=200){
             if(this.state.error.venue===null){
                 let copy=this.state.error
                 copy.venue="200 Characters Max"
@@ -213,6 +258,7 @@ class AddEvent extends React.Component {
     render() {
         return (
             <ContainerPanel>
+            
             <div style={{ padding: 16, margin: 'auto', maxWidth: 600 }}>
             <CssBaseline />
                     <Paper style={{ padding: 28 }}>
@@ -226,7 +272,7 @@ class AddEvent extends React.Component {
                         </Grid>
                         <Grid item xs={8}>
                             <Typography variant="h4" align="center" component="h1" style={{paddingBottom: 20, paddingTop:20}} gutterBottom>
-                                Add an Event
+                                Modify {this.props.event.event_name}
                             </Typography>
                         </Grid>
                         <Grid item xs={8}>
@@ -237,12 +283,12 @@ class AddEvent extends React.Component {
                             }}
                             required
                             id="name"
+                            value={this.state.event_name}
                             error={this.IsNameOk()}
                             label="Event Name"
                             helperText={this.state.error.name}
-                            value={this.state.name}
                             fullWidth
-                            onChange={event=>this.setState({name:event.target.value})}
+                            onChange={event=>this.setState({event_name:event.target.value})}
                         />
                         </Grid>
                         <Grid item xs={12}>
@@ -256,8 +302,8 @@ class AddEvent extends React.Component {
                             id="desc"
                             label="Event Description"
                             helperText={this.state.error.desc}
-                            value={this.state.desc}
-                            onChange={event=>this.setState({desc:event.target.value})}
+                            value={this.state.event_desc}
+                            onChange={event=>this.setState({event_desc:event.target.value})}
                         />
                         </Grid>
                         <Grid item xs={12}>
@@ -270,8 +316,7 @@ class AddEvent extends React.Component {
                             helperText={this.state.error.venue}
                             id="venue"
                             label="Event Venue"
-                            helperText={this.state.error.venue}
-                            value={this.state.venue}
+                            value={this.state.event_venue}
                             onChange={event=>this.setState({venue:event.target.value})}
                         />
                         </Grid>
@@ -283,8 +328,8 @@ class AddEvent extends React.Component {
                                     required
                                     error
                                     name="type" 
-                                    value={this.state.type} 
-                                    onChange={(event)=>{this.setState({type:event.target.value});if(event.target.value!='club'){this.setState({club:''})}}}>
+                                    value={this.state.event_type} 
+                                    onChange={(event)=>{this.setState({event_type:event.target.value});if(event.target.value!='club'){this.setState({club_id:0})}}}>
                                     <FormControlLabel label="Club" value="club" control={<Radio />} />
                                     <FormControlLabel label="Talks" value="talk" control={<Radio />} />
                                     <FormControlLabel label="Workshop" value="workshop" control={<Radio />} />
@@ -292,7 +337,7 @@ class AddEvent extends React.Component {
                             </FormControl>
                         </Grid>
                         {
-                            (this.state.type == 'club') ? 
+                            (this.state.event.event_type == 'club') ? 
                             <Grid item xs={5} align="right">
                                 <FormControl >
                                 <Box marginTop={2} width={120}>
@@ -301,8 +346,8 @@ class AddEvent extends React.Component {
                                         fullWidth
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
-                                        value={this.state.club}
-                                        onChange={event=>{this.setState({club:event.target.value})}}
+                                        value={this.state.club_id}
+                                        onChange={event=>{this.setState({club_id:event.target.value})}}
                                     >
                                         <MenuItem value={1}>Food Club</MenuItem>
                                         <MenuItem value={2}>Photography Club</MenuItem>
@@ -321,9 +366,9 @@ class AddEvent extends React.Component {
                                         fullWidth
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
-                                        value={this.state.club}
+                                        value={this.state.club_id}
                                         disabled
-                                        onChange={event=>{this.setState({club:event.target.value})}}
+                                        onChange={event=>{this.setState({club_id:event.target.value})}}
                                     >
                                         <MenuItem value={1}>Food Club</MenuItem>
                                         <MenuItem value={2}>Photography Club</MenuItem>
@@ -400,8 +445,8 @@ class AddEvent extends React.Component {
                                 <RadioGroup 
                                     row
                                     name="paid" 
-                                    value={this.state.paid} 
-                                    onChange={(event)=>{console.log(event.target.value);this.setState({paid:event.target.value})}}>
+                                    value={this.state.event_paid} 
+                                    onChange={(event)=>{this.setState({paid:event.target.value})}}>
                                     <FormControlLabel label="Yes" value="true" control={<Radio />} />
                                     <FormControlLabel label="No" value="false" control={<Radio />} />
                                 </RadioGroup>
@@ -413,8 +458,8 @@ class AddEvent extends React.Component {
                                 id="seats"
                                 type="number"
                                 label="Seats Available"
-                                value={this.state.seats}
-                                onChange={event=>this.setState({seats:event.target.value})}
+                                value={this.state.event_seats}
+                                onChange={event=>this.setState({event_seats:event.target.value.replace(/[^0-9]/g, '')})}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -422,7 +467,7 @@ class AddEvent extends React.Component {
                                 id="link"
                                 label="Registraion Link"
                                 helperText={this.state.error.link}
-                                value={this.state.link}
+                                value={this.state.event_reg_link}
                                 fullWidth
                                 onChange={event=>this.setState({link:event.target.value})}
                             />
@@ -433,7 +478,7 @@ class AddEvent extends React.Component {
                                 id="posterlink"
                                 label="Poster Link"
                                 helperText={this.state.error.poster}
-                                value={this.state.poster}
+                                value={this.state.event_poster}
                                 fullWidth
                                 onChange={event=>this.setState({poster:event.target.value})}
                             />
@@ -442,7 +487,7 @@ class AddEvent extends React.Component {
                             <Button
                                 type="button"
                                 variant="contained"
-                                //onClick={}
+                                onClick={()=>{this.reset()}}
                             >
                                 Reset
                             </Button>
@@ -462,8 +507,8 @@ class AddEvent extends React.Component {
             
             </div>
             </ContainerPanel>
-            )
+        )
     } 
 }
 
-export default AddEvent;
+export default ModifyEvent;
