@@ -10,6 +10,7 @@ import DropDown from './base/DropDown';
 import ContainerPanel from './base/ContainerPanel';
 import addicon from './images/addicon.JPG';
 import PosterComponent from './PosterComponent';
+import Footer from './Footer';
 
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import EventIcon from '@material-ui/icons/Event';

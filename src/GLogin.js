@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './index.css';
-import {Button,Box,Checkbox,FormLabel} from '@material-ui/core/';
+import {Button,Box,Checkbox,FormLabel, Typography} from '@material-ui/core/';
 import TopBar from './TopBar';
 import Footer from './Footer';
 import ContainerPanel from './base/ContainerPanel';
@@ -38,8 +38,15 @@ class GLogin extends React.Component{
                     <Paper style={{ padding: 50, minHeight: "89vh" }}>
 
                         <Grid container alignItems="flex-start" spacing={2} minHeight="800px" style={{padding: "12% 0 7% 0"}}>
+                             <Grid item xs={12}>
+                                <Typography variant="h4" align="center" component="h1" style={{ fontWeight: 700}} gutterBottom>
+                                    Welcome to AU EventLog
+                                </Typography>
 
-                    
+                                <div style={{width: 80, height: 4, margin: "20px auto", backgroundColor: "#ee5935"}}>
+                                </div>
+                            </Grid>
+
                             <Grid item xs={6}>
                                     <CardMedia
                                     component="img"
@@ -48,14 +55,16 @@ class GLogin extends React.Component{
                                     style={{width: 400, height: "400%"}}
                                     image={login}
                                     />  
-                                
                             </Grid>
 
                             <Grid item xs={6} align="center">
                             <Box marginTop={10}> 
-                                <FormLabel><h5>Welcome to</h5></FormLabel>
-                                <FormLabel><h4>AU Eventlog</h4></FormLabel>
-                                <Box marginTop={10}>
+                                {/* <FormLabel><h5>Welcome to</h5></FormLabel> */}
+                                <FormLabel><h4>Find your events just One-Click away. Click on the button <br/> to Sign in with Google.</h4>
+                            
+                                </FormLabel>
+                              
+                                <Box marginTop={6}>
                                 <Grid item xs={6}>
                                     <Button variant="contained" color="primary" ref="gButton">
                                     Login with Google</Button>
