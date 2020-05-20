@@ -17,11 +17,13 @@ import AboutCard from './AboutCardNew';
 import Footer from './Footer';
 
 import login from './images/login.png';
-//import muskan from './images/muskan.jpg';
+import sumit from './images/sumit.jpg';
+import arpit from './images/arpit.jpeg';
 import krinali from './images/krinali.jpg';
 import foram from './images/foram.png';
 import dhruvil from './images/dhruvil.jpg';
-import sumit from './images/foram.png';
+import muskan from './images/muskan.jpg';
+import vaishwi from './images/vaishwi.png';
 import aboutimage1 from './images/aboutimage1.jpg';
 import aboutimage2 from './images/aboutimage2.jpg';
 import aboutimage3 from './images/aboutimage3.jpg';
@@ -29,6 +31,8 @@ import aboutimage3 from './images/aboutimage3.jpg';
 class AboutUs extends React.Component{
     render() {
         return(
+            <div>
+            <TopBar />
              <ContainerPanel>
   
                 <div style={{ paddingTop: "5%", margin: 'auto', maxWidth: 1000, minHeight: "100vh" }}>
@@ -61,11 +65,17 @@ class AboutUs extends React.Component{
                                 </CardActionArea>
                             </Grid>
 
-                            <Grid item xs={6} align="center" style={{padding: "12% 0 7% 0"}}>
+                            <Grid item xs={6} align="center" style={{padding: "5% 0 7% 0"}}>
                                 
 
                                 <Box margin={2}>
-                                    <FormLabel><h4>Content </h4></FormLabel>
+                                    <FormLabel><h5>
+                                        The team of EventLog has tried to work on the idea of making the life of event organizers and stuents.
+                                        The goal was to have a organnized process which would allow the organizers and students to connect on a 
+                                        single platform. The alternative of emails to connect with students needed an alternative. 
+                                        Thus team EventLog has worked a way to allow the organizers to market their event and get registrations for their events.
+                                        For the students it has solved the issue of going through hundreds of mail to find the event details.
+                                      </h5></FormLabel>
                                 </Box>
                                         
                                     
@@ -79,23 +89,23 @@ class AboutUs extends React.Component{
                                 </div>
                             </Grid>
                             <Grid item xs={4}>
-                                <AboutCard name="Muskan Matwani" email="muskan.m1@ahduni.edu.in" contact="7990682487" image={foram} />
+                                <AboutCard name="Muskan Matwani" email="muskan.m1@ahduni.edu.in" contact="7990682487" image={muskan} />
                             </Grid>
 
                             <Grid item xs={4}>
-                                <AboutCard name="Sumit Pratihar" email="muskan.m1@ahduni.edu.in" contact="7600952095" image={foram} />
+                                <AboutCard name="Sumit Pratihar" email="sumit.p@ahduni.edu.in" contact="7600952095" image={sumit} />
                             </Grid>
 
                             <Grid item xs={4}>
-                                <AboutCard name="Arpit Patel" email="muskan.m1@ahduni.edu.in" contact="8849744514" image={foram} />
+                                <AboutCard name="Arpit Patel" email="arpit.p@ahduni.edu.in" contact="8849744514" image={arpit} />
                             </Grid>
 
                             <Grid item xs={4}>
-                                <AboutCard name="Vaishwi Patel" email="muskan.m1@ahduni.edu.in" contact="9664554959" image={foram} />
+                                <AboutCard name="Vaishwi Patel" email="vaishwi.p@ahduni.edu.in" contact="9664554959" image={vaishwi} />
                             </Grid>
 
                             <Grid item xs={4}>
-                                  <AboutCard name="Foram Vadher" email="muskan.m1@ahduni.edu.in" contact="9106542037" image={foram} />  
+                                  <AboutCard name="Foram Vadher" email="foram.v@ahduni.edu.in" contact="9106542037" image={foram} />  
                             </Grid>
 
                             <Grid item xs={4}>
@@ -115,7 +125,7 @@ class AboutUs extends React.Component{
                 </div>
                 <Footer />
             </ContainerPanel>
-            
+            </div>
         )
   }
 }

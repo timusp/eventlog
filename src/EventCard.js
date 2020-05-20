@@ -30,10 +30,6 @@ import photoImg from './images/photo_club.png'
 import envImg from './images/env_club.png'
 import danceImg from './images/dance_club.png'
 
-
-
-
-
 class EventCard extends React.Component{
     constructor(props){
         super(props);
@@ -45,28 +41,44 @@ class EventCard extends React.Component{
             reg:false,del:<Redirect to={{pathname: "/event",}}/>
         }
     }
-    
 
+    getSeats(){
+            fetch("http://localhost:8000/api/regs?event_id="+this.props.resp.event_id)
+            .then(res=>res.json())
+            .then(res=>{
+                //console.log(res.data)
+            })
+            .catch(err=>err);
+    }
     
-    
-    renderRegBtn(){
+    renderRegBtn() {
+        if(this.props.resp.event_paid===1){
+            return(
+                <Button variant="contained" size="small" color="link" 
+                    onClick={()=>window.open(this.props.resp.event_link)}
+                >
+                    Contact
+                </Button>
+            )
+        }else{
 
             if(this.state.reg){
                 return(
                     <Button variant="contained" size="small" color="secondary" onClick={()=>this.unregister(this.props.resp.event_id)}>
                         Unregister
-                </Button>
-            )
+                    </Button>
+                )
             }else{
                 return(
                     <Button variant="contained" size="small" color="primary" onClick={()=>this.register(this.props.resp.event_id)}>
-                            Register
-                    </Button>
+                                Register
+                        </Button>
                 )
             }
+        }
         
     }
-    renderButtons(){
+    renderButtons() {
         if(this.props.added===4){
             return(
                 <CardActions>
@@ -104,7 +116,43 @@ class EventCard extends React.Component{
             )
         }
     }
-    isDeleted(){
+    getClubName(club_id){
+        if(club_id===1){
+            return("Workshop")
+        }
+        else if(club_id===2){
+            return("Talk")
+        }
+        else if(club_id===3){
+            return("IEEE SB")
+        }
+        else if(club_id===4){
+            return("IEEE WIE")
+        }
+        else if(club_id===5){
+            return("Social Service Forum")
+        }
+        else if(club_id===6){
+            return("Fitness Club")
+        }
+        else if(club_id===7){
+            return("Food Club")
+        }
+        else if(club_id===8){
+            return("Sports Club")
+        }
+        else if(club_id===9){
+            return("Photography Club")
+        }
+        else if(club_id===10){
+            return("Quiz Club")
+        }
+    }
+
+    isDeleted() {
+        const date=new Date()
+        const today=date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear()
+
         if(this.props.resp.is_deleted==1){
             return(
                 <Box margin={1}>
@@ -115,12 +163,32 @@ class EventCard extends React.Component{
             )
         }
         else{
-            return(this.renderButtons())
+            if(today < this.props.event_deadline){
+                return(
+                    <Box margin={1}>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        Registrations over
+                    </Typography>
+                    </Box>
+                )
+            }else{
+                if(today < this.props.start_date){
+                    return(
+                        <Box margin={1}>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            Event Over
+                        </Typography>
+                        </Box>
+                    )
+                }else{
+                    return(this.renderButtons())
+
+                }
+            }
         }
     }
 
-    getCardImage(){
-        console.log(this.props.resp.club_id)
+    getCardImage() {
         fetch("http://localhost:8000/api/getclublogo?club_id="+this.props.resp.club_id)
             .then(res=>res.json())
             .then(res=>{
@@ -128,12 +196,13 @@ class EventCard extends React.Component{
             })
             .catch(err=>err);
     }
-    componentDidMount(){
+    componentDidMount() {
         this.isRegistered()
         this.getCardImage()
+        this.getSeats()
     }
 
-    register(event_id){
+    register(event_id) {
         const req={user_id:this.props.cur_user,event_id:event_id}
         fetch('http://localhost:8000/api/eventregister', {
                 method: 'POST',
@@ -147,7 +216,7 @@ class EventCard extends React.Component{
             this.setState({temp:!this.state.temp},()=>this.isRegistered())
         }
 
-    unregister(event_id){
+    unregister(event_id) {
         const req={user_id:this.props.cur_user,event_id:event_id}
         fetch('http://localhost:8000/api/unregister', {
                 method: 'POST',
@@ -162,7 +231,7 @@ class EventCard extends React.Component{
     }
 
 
-    isRegistered(){
+    isRegistered() {
         const req={user_id:this.props.cur_user,event_id:this.props.resp.event_id}
         fetch('http://localhost:8000/api/getregs', {
             method: 'POST',
@@ -172,20 +241,42 @@ class EventCard extends React.Component{
             body: JSON.stringify(req)
         })
         .then((res) => res.json())
-        .then((data)=>this.setState({reg:data.reg}))
+        .then((data)=>{
+            console.log(data.data)
+            this.setState({reg:data.reg})
+        })
         .catch((err)=>console.log(err))
     }
     modifyMark(){
-        if(this.props.resp.isModified==="true"){
-            return(<Box textAlign="right"><AnnouncementIcon color="secondary"/></Box>)
-        }else{return(null)}}
+        const date=new Date()
+        const today=date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear()
 
-    render(){
+            console.log(this.props.resp.is_modified)
+            if(this.props.resp.is_modified==="1"||this.props.resp.is_modified==="true"){
+                return(<Box textAlign="right"><AnnouncementIcon color="secondary"/></Box>)
+            }
+            else{
+                return(null)
+            }
+        /*
+            if(this.props.resp.start_date<today){
+                if(this.props.resp.is_modified==="1"||this.props.resp.is_modified==="true"){
+                    return(<Box textAlign="right"><AnnouncementIcon color="secondary"/></Box>)
+                }
+                else{
+                    return(null)
+                }
+            }
+        */
+
+    }
+        
+
+    render() {
+        
         return(
             <Container margin={1}>
-            
-            
-                <Card>
+                <Card style={{border: "1px groove #d9d9d9"}}>
                 <CardActionArea>
                     {this.modifyMark()}
                     <CardMedia
@@ -194,22 +285,29 @@ class EventCard extends React.Component{
                         image={this.state.logo}
                         title={this.props.resp.event_name}
                         onClick={()=>{
-                            this.setState({eventRed:<Redirect to={{pathname: "/event",}} />},
-                            this.props.onRed(this.props.resp)
-                            )
+                            if(this.props.resp.is_deleted!=1){
+                                this.setState({eventRed:<Redirect to={{pathname: "/event",}} />},
+                                this.props.onRed(this.props.resp)
+                                )
+                            }
                         }}
                     />
                     <CardContent>
+
                     <Typography gutterBottom variant="h5" component="h2">
                         {this.props.resp.event_name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        {this.props.resp.start_date}
-                        
-
+                        Category: {this.getClubName(this.props.resp.club_id)}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        {this.props.resp.event_venue}
+                        Date: {this.props.resp.start_date}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        Venue: {this.props.resp.event_venue}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        Deadline: {this.props.resp.event_deadline}
                     </Typography>
                     </CardContent>
                 </CardActionArea>
@@ -220,7 +318,6 @@ class EventCard extends React.Component{
             
             </Container>
         )
-
     }
 }
 

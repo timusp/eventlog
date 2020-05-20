@@ -10,7 +10,6 @@ import DropDown from './base/DropDown';
 import ContainerPanel from './base/ContainerPanel';
 import addicon from './images/addicon.JPG';
 import PosterComponent from './PosterComponent';
-import Footer from './Footer';
 
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import EventIcon from '@material-ui/icons/Event';
@@ -53,8 +52,18 @@ class EventDetails extends React.Component {
         
     }
     componentDidMount(){
-        this.setState({event:this.props.event})
         
+        this.setState({event:this.props.event})
+    }
+    componentWillMount(){
+        if(this.props.event===undefined){
+            window.open("http://localhost:3000/dashboard","_self");
+        }
+    }
+    redirect(){
+        if(this.props.event===undefined){
+            window.open("http://localhost:3000/dashboard","_self");
+        }
     }
 
     getClubName(club_id){
@@ -160,8 +169,11 @@ class EventDetails extends React.Component {
                 <Grid container alignItems="flex-start" spacing={2} minHeight="800px" style={{padding: "0 0 7% 0"}}>
 
                         <Grid item xs={12}>
-                            <Typography variant="h5" align="center" component="h1" style={{paddingBottom: 10}} gutterBottom>
-                                {this.state.event.event_name}
+                            <Typography variant="h5" align="center" component="h1" style={{paddingBottom: 10, fontWeight: 700, fontSize: "35px"}} gutterBottom>
+                                 {this.getClubName(this.state.event.club_id)} : {this.state.event.event_name}
+
+                                <div style={{width: 80, height: 4, margin: "20px auto", backgroundColor: "#ee5935"}}>
+                                </div>
                             </Typography>
                         </Grid>
 
@@ -180,50 +192,52 @@ class EventDetails extends React.Component {
                         <Grid container alignItems="flex-start" spacing={2}>
 
                             <Grid item xs={12} align="left" style={{marginLeft: "5%", marginRight: "5%"}}>
-                                <Typography align="left" component="h1" style={{paddingBottom: 10, paddingTop:10,}} gutterBottom>
-                                {this.state.event.event_type} Event
+
+                                <Typography align="left" component="h1" style={{ paddingTop:10, fontSize: "20px", fontWeight: 600}}>
+                                    Type Of Event: 
                                 </Typography>
-                                <Typography align="left" component="h1" style={{paddingBottom: 10, paddingTop:10,}} gutterBottom>
+
+                                <Typography align="left" component="h1" style={{paddingBottom: 10, fontSize: "15px"}} gutterBottom>
+                                    {this.state.event.event_type} Event :  
+                                 {this.getClubName(this.state.event.club_id)}
+                                </Typography>
+                                {/* <Typography align="left" component="h1" style={{paddingBottom: 10, paddingTop:10,}} gutterBottom>
                                     {this.getClubName(this.state.event.club_id)}
-                                </Typography>
-                                <Typography align="left" component="h1" style={{paddingBottom: 10, paddingTop:10,}}>
+                                </Typography> */}
+                                <Typography align="left" component="h1" style={{paddingTop:10, fontSize: "20px", fontWeight: 600}}>
                                     Description: 
                                 </Typography>
-                                <Typography align="left" component="h2" style={{paddingBottom: 10, paddingTop:10,}} gutterBottom>
+                                <Typography align="left" component="h2" style={{paddingBottom: 10,}} gutterBottom>
                                 {this.state.event.event_desc}
                                 </Typography>
                             </Grid>
 
-                            <Grid item xs={6} align="left" style={{paddingLeft: "7%"}}>
-                                <LocationOnIcon />
-                                {this.state.event.event_venue}
+                            <Grid item xs={6} align="left" style={{paddingLeft: "7%", fontSize: "20px", fontWeight: 600}}>
+                                <LocationOnIcon /> Venue: 
+                                 {this.state.event.event_venue} 
                             </Grid>
 
-                            <Grid item xs={6} align="left" style={{paddingRight: "0%"}}>
-                                <EventIcon />
+                            <Grid item xs={6} align="left" style={{paddingRight: "0%", fontSize: "20px", fontWeight: 600}}>
+                                <EventIcon /> Date: 
                                 {this.state.event.start_date} {this.state.event.end_date} 
                             </Grid>
 
-                            <Grid item xs={6} align="left" style={{paddingLeft: "7%"}}>
-                                {this.state.event.seats}
+                            <Grid item xs={6} align="left" style={{paddingLeft: "7%", fontSize: "20px", fontWeight: 600}}>
+                                Number of Seats: {this.state.event.seats}
                             </Grid>
 
-                            <Grid item xs={6} align="left" style={{paddingRight: "0%"}}>
-                            <AccessTimeIcon />
+                            <Grid item xs={6} align="left" style={{paddingRight: "0%", fontSize: "20px", fontWeight: 600}}>
+                            <AccessTimeIcon /> Time: 
                             {this.state.event.event_time}
-                            
-                            
                             
                         </Grid>
                         
                         </Grid>
-                        <Box marginTop={10} display="flex">
+                        <Box marginTop={10} display="flex" align="right">
                             <Grid item xs={6} >
-                                <Button variant="contained" size="small" color="secondary" onClick>
-                                        Back
-                                </Button>
+                                
                             </Grid>
-                            <Grid item xs={6} align="center">
+                            <Grid item xs={6} align="left" style={{marginLeft: "2%"}}>
 
                                     {this.renderRegBtn()}
 

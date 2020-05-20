@@ -7,7 +7,9 @@ import Footer from './Footer';
 import ContainerPanel from './base/ContainerPanel';
 import login from './images/login.jpg';
 import CardMedia from '@material-ui/core/CardMedia';
-
+import {
+  Redirect
+} from "react-router-dom";
 import {Paper, Grid, CssBaseline } from '@material-ui/core';
 
 
@@ -77,13 +79,31 @@ class GLogin extends React.Component{
                         </Grid>
                     </Paper>
                 </div>
-                    
+                    {this.state.redir}
             </ContainerPanel>
             <Footer />
             </div>
         )
 
 
+    }
+    
+
+    renderAuth (){
+
+      if(this.state.is_auth){
+        localStorage.setItem('document',JSON.stringify(this.state));
+        if(this.state.is_new){
+              window.open("http://localhost:3000/selectclubs","_self");
+          }
+        
+        else{
+              window.open("http://localhost:3000/dashboard","_self");
+        }
+      }
+      else{
+        //this.setState({redir:<Redirect to={{pathname: "/",}} />})
+      }
     }
 
     postAPI(){
@@ -108,8 +128,9 @@ class GLogin extends React.Component{
               if(data.id!=0){
                 this.setState({is_auth:true})
               }
-              this.props.onLogin(this.state.cur_user,this.state.is_new,this.state.is_auth,this.state.is_org);
-              
+              this.props.onLogin(this.state.cur_user,this.state.is_new,this.state.is_auth,this.state.is_org,this.state.fname);
+              this.renderAuth()
+              //return <Redirect to={{pathname: "/",}} />
             })
 
             .catch((err)=>console.log(err))
@@ -141,6 +162,7 @@ class GLogin extends React.Component{
     componentDidMount() {
         this.googleSDK();
         //this.postAPI();
+        this.renderAuth()
     }
   
     prepareLoginButton = () => {

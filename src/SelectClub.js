@@ -31,7 +31,9 @@ class SelectClubs extends React.Component{
                 club_name:"",
                 isChecked:false
             }],
-            red:null
+            count:0,
+            red:null,
+            err:'',
         }
     }
     
@@ -52,6 +54,20 @@ class SelectClubs extends React.Component{
             this.setState({clubs});
         })
         .catch(err=>err);
+    }
+
+    minClub(){
+        this.state.clubs.map(item=>{
+            if(item.isChecked){
+                this.setState({count:this.state.count+1})
+            }
+        })
+        if(this.state.count<3){
+            this.setState({err:"Select minimum 3 clubs"})
+        }
+        else{
+            this.setState({err:""})
+        }
     }
 
     getSelected(){
@@ -102,7 +118,7 @@ class SelectClubs extends React.Component{
                 club.isChecked=!club.isChecked;
             }
         })
-        this.setState({clubs:copy});
+        this.setState({clubs:copy},()=>this.minClub());
     }
 
     render() {
@@ -116,15 +132,23 @@ class SelectClubs extends React.Component{
                 alignItems="center"
                 minHeight="100vh"
             > */}
-                <div style={{ paddingTop: "5%", margin: 'auto', maxWidth: 900 }}>
+                <div style={{ paddingTop: "5%", margin: 'auto', maxWidth: 1000 }}>
                     <CssBaseline />
 
-                    <Paper style={{ padding: 50}}>
+                    <Paper style={{ padding: 40, height: "90vh"}}>
 
-                        <Grid container alignItems="flex-start" spacing={2} style={{padding: "12% 0 7% 0"}}>
+                        <Grid container alignItems="flex-start" spacing={2} style={{padding: "3% 0 7% 0"}}>
 
+                            <Grid item xs={12}>
+                                <Typography variant="h4" align="center" component="h1" style={{ fontWeight: 700}} gutterBottom>
+                                    Select your preferred Categories
+                                </Typography>
+
+                                <div style={{width: 80, height: 4, margin: "20px auto", backgroundColor: "deeppink"}}>
+                                </div>
+                            </Grid>
                     
-                            <Grid item xs={6}>
+                            <Grid item xs={6} style={{paddingTop: "8%"}}>
                                     <CardMedia
                                     component="img"
                                     alt="Contemplative Reptile"
@@ -136,7 +160,7 @@ class SelectClubs extends React.Component{
                                 
                             </Grid>
 
-                            <Grid item xs={6} align="center">
+                            <Grid item xs={6} align="center" style={{paddingTop: "2%"}}>
                                 
                                     <form
                                         id="club-select"
@@ -144,10 +168,6 @@ class SelectClubs extends React.Component{
                                         method={this.props.method}
                                         onSubmit={this.onSubmit}
                                     >
-                                    <Box margin={2}>
-                                        <FormLabel><h4>Select your preferred Clubs </h4></FormLabel>
-                                    </Box>
-                                        
                                         {
                                             //console.log(this.state.clubs)
                                             this.state.clubs.map((club, index) => (
@@ -170,11 +190,16 @@ class SelectClubs extends React.Component{
                                             ))
                                             
                                         }
+
+                                        
+                                            {this.state.err}
+                                        
+
                                         <Box
                                             display="flex"
                                             justifyContent="center"
                                             alignItems="center"
-                                            margin={5}
+                                            margin={4}
                                         >
                                             <Button variant="contained" color="primary" 
                                                 
@@ -192,11 +217,9 @@ class SelectClubs extends React.Component{
                     
                 {this.state.red}
             
-       
+                <Footer />
             </ContainerPanel>
         )
-
-
   }
 }
 

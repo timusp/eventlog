@@ -37,27 +37,28 @@ class BasicExample extends React.Component {
       is_new:false,
       is_auth:false,
       is_org:false,
+      name:'',
     }
     
   }
-
-  renderAuth(){
+/*
+  renderAuth = ()=>{
 
     
     if(this.state.is_auth){
       localStorage.setItem('document',JSON.stringify(this.state));
       if(this.state.is_new){
-        return(<Redirect to={{pathname: "/selectclubs",}} />)
+        this.setState({redir:<Redirect to={{pathname: "/selectclubs",}} />})
       }
       else{
-        return(<Redirect to={{pathname: "/dashboard",}} />)
+        this.setState({redir:<Redirect to={{pathname: "/dashboard",}} />})
       }
     }
     else{
-      return(<Redirect to={{pathname: "/",}} />)
+      //this.setState({redir:<Redirect to={{pathname: "/",}} />})
     }
   }
-
+*/
 
   componentWillMount() {
       this.documentData = JSON.parse(localStorage.getItem('document'));
@@ -67,6 +68,7 @@ class BasicExample extends React.Component {
             is_new:this.documentData.is_new,
             is_auth:this.documentData.is_auth,
             is_org:this.documentData.is_org,
+            name:this.documentData.name,
         })
       } else {
           this.setState({
@@ -74,18 +76,19 @@ class BasicExample extends React.Component {
             is_new:false,
             is_auth:false,
             is_org:false,
+            name:'',
           })
       }
   }
 
   render(){
-
+    
     return (
       <div>
 
         <Route
           exact path='/'
-          render={(props) => <GLogin {...props} onLogin={(cur_user,is_new,is_auth,is_org)=>{this.setState({cur_user:cur_user,is_new:is_new,is_auth:is_auth,is_org:is_org})}} />}
+          render={(props) => <GLogin {...props} onLogin={(cur_user,is_new,is_auth,is_org,name)=>{this.setState({cur_user:cur_user,is_new:is_new,is_auth:is_auth,is_org:is_org,name:name})}} />}
         />
         <ProtectedRoute
           exact path='/dashboard'
@@ -121,15 +124,16 @@ class BasicExample extends React.Component {
           is_auth={this.state.is_auth}
           cur_user={this.state.cur_user}
         />
-        <ProtectedRoute
+        <Route
           exact path='/aboutus'
           component={AboutUs}
           is_auth={this.state.is_auth}
           cur_user={this.state.cur_user}
         />
-
+        
         {
-          this.renderAuth()
+          //this.renderAuth()
+          //this.state.redir
         }
         
         
@@ -137,7 +141,8 @@ class BasicExample extends React.Component {
       </div>
     )}
   componentDidMount() {
-    }
+    //this.renderAuth()
+  }
 };
 export default BasicExample;
 
@@ -149,6 +154,7 @@ export default BasicExample;
  ReactDOM.render(
     <BrowserRouter><BasicExample /></BrowserRouter>,
     //<GLogin />,
+    //<AboutUs />,
     //<EventCard />,
     //<SelectClub />,
     //<Test />,

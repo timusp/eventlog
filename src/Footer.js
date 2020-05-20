@@ -16,8 +16,7 @@ const Footer = () => {
           <MDBCol md="4">
             <h5 className="title" style={{color: "#000", fontWeight: 700}}>EventLog</h5>
             <p>
-              Here you can use rows and columns here to organize your footer
-              content.
+            we create possibility for a bridge between the organizers and the attendes and make their life a bit organized by providing every detail of every events on campus.
             </p>
           </MDBCol>
 
@@ -25,21 +24,7 @@ const Footer = () => {
 
           </MDBCol>
           <MDBCol md="3">
-            <h5 className="title" style={{color: "#000", fontWeight: 700}}>Categories</h5>
-            <ul>
-              <li style={{color: "#000"}}>
-                <a href="#!" style={{color: "#fff"}}>All Events</a>
-              </li>
-              <li style={{color: "#000"}}>
-                <a href="#!" style={{color: "#fff"}}>Clubwise Events</a>
-              </li>
-              <li style={{color: "#000"}}>
-                <a href="#!" style={{color: "#fff"}}>Events for Me</a>
-              </li>
-              <li style={{color: "#000"}}>
-                <a href="#!" style={{color: "#fff"}}>Registered Events</a>
-              </li>
-            </ul>
+            
           </MDBCol>
           <MDBCol md="4">
             <h5 className="title" style={{color: "#000", fontWeight: 700}}>Ahmedabad University</h5>

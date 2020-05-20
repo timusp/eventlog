@@ -17,6 +17,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+import { Typography, Paper, Link, Grid, CssBaseline, RadioGroup, FormGroup, FormControlLabel,
+} from '@material-ui/core';
+
 class MainPage extends React.Component{
     constructor(props){
         super(props);
@@ -185,7 +188,7 @@ class MainPage extends React.Component{
 
             <Box
                 
-                display="flex"
+            display="flex"
               justifyContent="center"
               alignItems="center"
               minHeight="100vh"
@@ -244,10 +247,11 @@ class MainPage extends React.Component{
             })
             .catch(err=>err);
     }
-/*
+
     renderCard(){
         const myData = [].concat(this.state.events).sort((a, b) => a.modification_date > b.modification_date ? 1 : -1)
-        //console.log(myData)
+        //const myData2 = [].concat(myData).sort((a, b) => a.is_modified < b.is_modified ? 1 : -1)
+        
         return(
 
             myData.map((item, index) => (
@@ -272,14 +276,20 @@ class MainPage extends React.Component{
         ))
         )
     }
-*/    
+    
     render(){
        // console.log(this.state.resp[1]);
        return(
+
             <div>
                 {this.renderOverlay()
                 }
             <TopBar cur_user={this.props.cur_user} isAuth={this.props.is_auth} />
+             <div style={{ paddingTop: "0%", margin: 'auto', maxWidth: 1000 }}>
+                    <CssBaseline />
+
+                    <Paper style={{ padding: 40, height: "100%"}}>
+
                     <Box
                         display="flex"
                         justifyContent="center"
@@ -304,7 +314,7 @@ class MainPage extends React.Component{
                     >
                         <Box width={900} >
                                     <GridList cols={3} cellHeight="50%">
-                                        {
+                                        {   /*
                                             this.state.events.map((item, index) => (
                                             <Box key={index} marginBottom={2}>
                                             <GridListTile cols={1} key={index}>
@@ -325,15 +335,21 @@ class MainPage extends React.Component{
                                             </GridListTile>
                                             </Box>
                                             ))
-                                            
+                                           */ 
+                                           this.renderCard()
                                         }
                                     </GridList>
                         </Box>
                         
-                 </Box>       
+                 </Box>  
+               
+                 </Paper>
+                   
                  {this.state.red}
+                  </div> 
                  <Footer />
-            </div>
+
+        </div>
         )    
     }
 }

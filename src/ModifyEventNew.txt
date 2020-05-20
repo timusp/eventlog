@@ -157,7 +157,7 @@ class ModifyEvent extends React.Component {
             event_poster:this.props.event.event_poster,
             event_link:this.props.event.event_link,
             event_paid:this.props.event.event_paid,
-            event_seats:this.props.event.event_seat,
+            event_seats:this.props.event.event_seats,
             start_date:this.props.event.start_date,
             start_date2:this.props.event.start_date,
             end_date:this.props.event.end_date,
@@ -221,9 +221,9 @@ class ModifyEvent extends React.Component {
     }
 
     IsLinkOk(){
-        if(this.state.event.event_link!=''){
+        if(this.state.event_link!=''){
 
-        if(!this.validURL(this.state.event.event_link)){
+        if(!this.validURL(this.state.event_link)){
             if(this.state.error.link===null){
                 let copy=this.state.error
                 copy.link="Invalid url"
@@ -315,9 +315,9 @@ class ModifyEvent extends React.Component {
         }
     }
     IsPosterOk(){
-        if(this.state.event.event_poster!=''){
+        if(this.state.event_poster!=''){
 
-        if(!this.validURL(this.state.event.event_poster)){
+        if(!this.validURL(this.state.event_poster)){
             if(this.state.error.poster===null){
                 let copy=this.state.error
                 copy.poster="Invalid url"

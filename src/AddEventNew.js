@@ -52,7 +52,7 @@ class AddEvent extends React.Component {
             is_deleted:false,
             err:false,
             btnColor:"primary",
-            error:{name:null,desc:null,venue:null},
+            error:{name:null,desc:null,venue:null,link:null,poster:null},
             req:{   event_name:null,
                     event_desc:null,
                     club_id:null,
@@ -90,7 +90,7 @@ class AddEvent extends React.Component {
                         is_deleted:false,
                         err:false,
                         btnColor:"primary",
-                        error:{name:null,desc:null,venue:null},
+                        error:{name:null,desc:null,venue:null,seat:null},
                         req:{   event_name:null,
                                 event_desc:null,
                                 club_id:null,
@@ -110,6 +110,8 @@ class AddEvent extends React.Component {
         
         })
     }
+
+    
 
     checkErr(){
         if(this.state.event_name===''||
@@ -135,7 +137,9 @@ class AddEvent extends React.Component {
 
     SubmitEvent(){
         console.log(this.checkErr())
-
+        const temp=new Date()
+        const today=temp.getDate()+'/'+temp.getMonth()+'/'+temp.getFullYear()
+        console.log(today)
         if(!this.checkErr()){
             console.log("ran")
             this.setState({
@@ -155,11 +159,10 @@ class AddEvent extends React.Component {
                     added_by:this.props.cur_user,
                     is_deleted:false,
                     is_modified:false,
-                    modification_date:null,
+                    modification_date:"\'"+temp.getDate()+'/'+temp.getMonth()+'/'+temp.getFullYear()+"\'",
                 }
             },()=>this.callApi()
             )
-            
             
             this.setState({btnColor:"primary"})
         }else{
@@ -180,6 +183,7 @@ class AddEvent extends React.Component {
             //.then((data) =>  console.log(data))
             .catch((err)=>console.log(err))
         alert('event added!')
+        window.open("http://localhost:3000/dashboard","_self");
     }
     
     isTypeOk(){
@@ -235,6 +239,27 @@ class AddEvent extends React.Component {
             }
         }
     }
+    IsSeatOk(){
+        if(this.state.event_seat<0){
+            if(this.state.error.seat===null){
+                let copy=this.state.error
+                copy.seat="Only positive values"
+                this.setState({error:copy})
+                return(true)
+            }
+            else{
+                return(true)
+            }
+        }
+        else{
+            if(this.state.error.seat!=null){
+                let copy=this.state.error
+                copy.seat=null
+                this.setState({error:copy})
+                return(false)
+            }
+        }
+    }
     IsVenueOk(){
         if(this.state.event_venue.length>=200){
             if(this.state.error.venue===null){
@@ -256,6 +281,89 @@ class AddEvent extends React.Component {
             }
         }
     }
+    IsLinkOk(){
+        if(this.state.event_link!=''){
+
+            if(!this.validURL(this.state.event_link)){
+                if(this.state.error.link===null){
+                    let copy=this.state.error
+                    copy.link="Invalid url"
+                    this.setState({error:copy})
+                    return(true)
+                }
+                else{
+                    return(true)
+                }
+                
+            }
+            else{
+                if(this.state.error.link!=null){
+                    let copy=this.state.error
+                    copy.link=null
+                    this.setState({error:copy})
+                    return(false)
+                }
+            }
+        }
+        }
+    IsPosterOk(){
+        if(this.state.event_poster!=''){
+
+            if(!this.validURL(this.state.event_poster)){
+                if(this.state.error.poster===null){
+                    let copy=this.state.error
+                    copy.poster="Invalid url"
+                    this.setState({error:copy})
+                    return(true)
+                }
+                else{
+                    return(true)
+                }
+                
+            }
+            else{
+                if(this.state.error.poster!=null){
+                    let copy=this.state.error
+                    copy.poster=null
+                    this.setState({error:copy})
+                    return(false)
+                }
+            }
+        }
+        
+    }
+    IsDateOk(){
+        if(!this.validURL(this.state.event_poster)){
+            if(this.state.error.poster===null){
+                let copy=this.state.error
+                copy.poster="Invalid url"
+                this.setState({error:copy})
+                return(true)
+            }
+            else{
+                return(true)
+            }
+            
+        }
+        else{
+            if(this.state.error.poster!=null){
+                let copy=this.state.error
+                copy.poster=null
+                this.setState({error:copy})
+                return(false)
+            }
+        }
+    
+    }
+    validURL(str) {
+        var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+          '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+          '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+          '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+        return !!pattern.test(str);
+    }
     
     render() {
         return (
@@ -263,14 +371,22 @@ class AddEvent extends React.Component {
             <ContainerPanel>
             <TopBar />
         
-                <div style={{ paddingTop: "5%", margin: 'auto', maxWidth: 900, minHeight: "100vh" }}>
+                <div style={{ paddingTop: "5%", margin: 'auto', maxWidth: 1000, minHeight: "100vh" }}>
                     <CssBaseline />
 
                     <Paper style={{ padding: 50, minHeight: "89vh" }}>
 
-                        <Grid container alignItems="flex-start" spacing={2} minHeight="800px" style={{padding: "12% 0 7% 0"}}>
+                        <Grid container alignItems="flex-start" spacing={2} minHeight="800px" style={{padding: "0% 0 7% 0"}}>
 
-                    
+                            <Grid item xs={12}>
+                                    <Typography variant="h4" align="center" component="h1" style={{paddingBottom: 0, paddingTop:0, fontWeight: 700}} gutterBottom>
+                                        Add an Event
+                                    </Typography>
+
+                                    <div style={{width: 80, height: 4, margin: "20px auto", backgroundColor: "red"}}>
+                                    </div>
+                            </Grid>
+
                             <Grid item xs={6}>
                                     <CardMedia
                                     component="img"
@@ -287,11 +403,7 @@ class AddEvent extends React.Component {
                             <Grid item xs={6} align="center">
                                 
                             <Grid container alignItems="flex-start" spacing={2}>
-                                <Grid item xs={8}>
-                                    <Typography variant="h4" align="center" component="h1" style={{paddingBottom: 20, paddingTop:20}} gutterBottom>
-                                        Add an Event
-                                    </Typography>
-                                </Grid>
+                                
                                 <Grid item xs={8}>
 
                                 <TextField
@@ -385,6 +497,7 @@ class AddEvent extends React.Component {
                                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                             <DatePicker 
                                                 disablePast
+                                                error
                                                 autoOk
                                                 format="dd-MM-yyyy"
                                                 value={this.state.start_date2} 
@@ -456,15 +569,19 @@ class AddEvent extends React.Component {
                                     <Box style={{paddingTop:20}}><TextField
                                         id="seats"
                                         type="number"
+                                        error={this.IsSeatOk()}
+                                        helperText={this.state.error.seat}
+
                                         label="Seats Available"
                                         value={this.state.event_seats}
-                                        onChange={event=>this.setState({event_seats:event.target.value.replace(/[^0-9]/g, '')})}
+                                        onChange={event=>this.setState({event_seats:event.target.value})}
                                     /></Box>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
                                         id="link"
                                         label="Registraion Link"
+                                        error={this.IsLinkOk()}
                                         helperText={this.state.error.link}
                                         value={this.state.event_link}
                                         fullWidth
@@ -476,6 +593,7 @@ class AddEvent extends React.Component {
                                         required
                                         id="posterlink"
                                         label="Poster Link"
+                                        error={this.IsPosterOk()}
                                         helperText={this.state.error.poster}
                                         value={this.state.event_poster}
                                         fullWidth
@@ -507,7 +625,7 @@ class AddEvent extends React.Component {
                         </Grid>
                     </Paper>
                 </div>
-                    
+            <Footer />
             </ContainerPanel>
             
             
