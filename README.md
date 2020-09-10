@@ -12,6 +12,3 @@ Eventlog is an event management app for universities.
     cd ../eventlog
     npm install
     npm start
-
-# Screenshots
-
